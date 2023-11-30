@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Advent of Code",
     "section": "",
-    "text": "Advent of Code is a series of increasingly difficult programming challenges, released daily each year throughout December in the run-up to Christmas.\nThis website is created from the EllaKaye/advent-of-code-website-template template repository. There’s documentation on how to use and adapt the template in the repo README.\nIt is built with Quarto and works hand-in-hand with the R package aochelpers. The package provides function to manage this website, e.g. to create new posts from a template, to download and read in the puzzle input, and will eventually include functions to help with the challenges themselves. See the package website for more details.\nLet’s do this!"
+    "text": "Advent of Code is a series of increasingly difficult programming challenges, released daily each year throughout December in the run-up to Christmas.\nThis website is created from the EllaKaye/advent-of-code-website-template template repository. There’s documentation on how to use and adapt the template in their repo README."
   },
   {
     "objectID": "fonts/LICENSE.html",
@@ -25,35 +25,21 @@
     "href": "2022/day/1/index.html",
     "title": "2022: Day 1",
     "section": "",
-    "text": "The original challenge\nMy data"
+    "text": "The original challenge"
   },
   {
     "objectID": "2022/day/1/index.html#setup",
     "href": "2022/day/1/index.html#setup",
     "title": "2022: Day 1",
     "section": "",
-    "text": "The original challenge\nMy data"
+    "text": "The original challenge"
   },
   {
-    "objectID": "2022/day/1/index.html#part-1",
-    "href": "2022/day/1/index.html#part-1",
+    "objectID": "2022/day/1/index.html#my-solution",
+    "href": "2022/day/1/index.html#my-solution",
     "title": "2022: Day 1",
-    "section": "Part 1",
-    "text": "Part 1\nI’m including this post in the website example to demonstrate what a typical post will look like, using post-template, in the _templates directory as a starting point. This post is created by a call to aoc_new_day(1, 2022). It can be deleted with a call to aoc_delete_day(1, 2022), or all posts and the listing for the year can be deleted with aoc_delete_year(2022).\n\n\n\n\n\n\nNote\n\n\n\nThis is Ella Kaye’s solution1, with her puzzle input. If attempting this challenge yourself, your solution will be different.\n\n\n\n\nCode\nlibrary(aochelpers)\ninput &lt;- aoc_input_vector(1, 2022, \"numeric\")\n\n\nI’m using the aoc_input_vector() function from the aochelpers package to read in the data, but otherwise using base R functions (including the native pipe, |&gt;) for this puzzle.\nIn this challenge, we’re given groups of numbers and we need to find the sum of each group. Our solution is the largest of these. The groups are separated by a blank line. When reading in the input as a numeric vector, these are coerced to NA. We can identify the new groups by the NA values, produce an index for them with cumsum(is.na(input)), which increments when a new NA is reached, then use this with split() to split the input into a list of vectors, one for each group. We need the argument na.rm = TRUE in sapply() because each vector, other than the first, starts with NA, as that’s where it was split.\n\n\nCode\ntotals &lt;- split(input, cumsum(is.na(input))) |&gt; \n  sapply(sum, na.rm = TRUE) \n\nmax(totals)\n\n\n[1] 66719"
-  },
-  {
-    "objectID": "2022/day/1/index.html#part-2",
-    "href": "2022/day/1/index.html#part-2",
-    "title": "2022: Day 1",
-    "section": "Part 2",
-    "text": "Part 2\nThis is similar, except we want to find the sum of the sums of the top three groups.\n\n\nCode\ntotals |&gt; \n  sort() |&gt; \n  tail(3) |&gt; \n  sum()\n\n\n[1] 198551"
-  },
-  {
-    "objectID": "2022/day/1/index.html#footnotes",
-    "href": "2022/day/1/index.html#footnotes",
-    "title": "2022: Day 1",
-    "section": "Footnotes",
-    "text": "Footnotes\n\n\nElla is the author of this website template and of the aochelpers package, and the author of this demo post.↩︎"
+    "section": "My solution",
+    "text": "My solution\n\n\nCode\n# packages\nlibrary(dplyr)\n\n# import data\nraw &lt;- read.delim(\"input.txt\", blank.lines.skip = FALSE, header = FALSE)\n\nraw &lt;- rename(raw, calories = V1)\n\n\nAssociate each entry with an elf. Each blank line indicates a new elf.\n\n\nCode\nnext.elf &lt;- c(1, which(is.na(raw))) # where do the next elfs start?\nn.elf &lt;- length(next.elf)           # how many new elfs?\nraw$elfID &lt;- 0                      # set index\n\n\nindex elves\n\n\nCode\nfor(e in 1:(n.elf-1)){\n  raw$elfID[next.elf[e]:(next.elf[e+1]-1)] &lt;- e\n}\n\n\nadd the last elf\n\n\nCode\nraw$elfID[next.elf[e+1]:NROW(raw)] &lt;- n.elf\n\n\nnow drop empty rows\n\n\nCode\nelves &lt;- na.omit(raw)\n\n\n\n\n\n\n\n\n❓ Which elf has the most calories?\n\n\n\n\n\n\n\n\nCode\nelves %&gt;% group_by(elfID) %&gt;%\n  summarize(tot.cals = sum(calories)) %&gt;%\n  arrange(desc(tot.cals)) %&gt;% slice(1)\n\n\n# A tibble: 1 × 2\n  elfID tot.cals\n  &lt;dbl&gt;    &lt;int&gt;\n1   189    68775\n\n\n\n\n\n\n\n\n❓ How many calories are carried by the top three elves?\n\n\n\n\n\n\n\n\nCode\ntop3 &lt;- elves %&gt;% group_by(elfID) %&gt;%\n  summarize(tot.cals = sum(calories)) %&gt;%\n  arrange(desc(tot.cals)) %&gt;% slice(1:3)\nsum(top3$tot.cals)\n\n\n[1] 202585"
   },
   {
     "objectID": "2022.html",
