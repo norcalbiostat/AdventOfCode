@@ -9,3 +9,24 @@ code-tools: false
 
 This website is created from the  [EllaKaye/advent-of-code-website-template](https://github.com/EllaKaye/advent-of-code-website-template) template repository. There's documentation on how to use and adapt the template in their repo README.
 
+
+# Advent of Code 2023
+
+| Task Name                      | Start      | ⭐         | ⭐⭐       |
+|--------------------------------|------------|------------|------------|
+| Day 1: Trebuchet?!             | 2023-12-01 |            | 2023-12-01 |
+
+
+
+# Advent of Code 2022
+
+| Task Name                      | Start      | ⭐         | ⭐⭐       |
+|--------------------------------|------------|------------|------------|
+| Day 1: Calorie Counting        | 2022-12-02 |            | 2022-12-02 |
+| Day 2: Rock Paper Scissors     | 2022-12-03 |            | 2022-12-03 |
+| Day 3: Rucksack Reorganization | 2022-12-04 |            | 2022-12-04 |
+| Day 4: Camp Cleanup            | 2022-12-05 | 2022-12-05 | 2022-12-06 |
+| Day 5: Supply Stacks           | 2022-12-07 |            |            |
+|                                |            |            |            |
+
+And then I got sick.... 

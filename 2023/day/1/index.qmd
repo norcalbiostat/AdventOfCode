@@ -1,0 +1,235 @@
+---
+title: "2023: Day 1"
+date: 2023-12-1
+categories:
+  - regex
+  - hard
+draft: false
+---
+
+## Setup
+
+[The original challenge](https://adventofcode.com/2023/day/1)
+
+```{r}
+library(aochelpers) # for data loading
+library(stringr); library(stringi)
+input <- aoc_input_vector(1, 2023)
+head(input)
+```
+
+:::{.callout-tip icon=true}
+### Example Data
+```{r}
+exa <- c("1abc2","pqr3stu8vwx","a1b2c3d4e5f","treb7uchet")
+```
+
+:::
+
+## Part 1
+
+:::{.callout-warning icon=false}
+### ❓ What is my calibration number? 
+
+On each line, the calibration value can be found by combining the first digit and the last digit (in that order) to form a single two-digit number.
+:::
+
+Remove all characters from the string, then grab the first and last number.
+```{r}
+nums <- gsub("[a-z]", "", input)
+first.num <- str_extract(nums, "^.")
+last.num <- str_extract(nums, ".$")
+cbind(nums, first.num, last.num)[c(1,4,300,304),] # verify
+```
+
+Paste together to create the two-digit calibration number.
+```{r}
+calibration.value <- as.numeric(paste0(first.num, last.num))
+cbind(nums, first.num, last.num, calibration.value)[c(1,4,300,304),] 
+```
+
+Submission value: 
+```{r}
+sum(calibration.value) 
+```
+
+⭐
+
+## Part 2
+
+:::{.callout-warning icon=false}
+### ❓ What is my  _actual_ calibration number? 
+
+> "Your calculation isn't quite right. It looks like some of the digits are actually spelled out with letters: one, two, three, four, five, six, seven, eight, and nine also count as valid "digits"." 
+
+:::
+
+```{r}
+exa2 <- c("two1nine",
+  "eightwothree",
+  "abcone2threexyz",
+  "xtwone3four",
+  "4nineeightseven2",
+  "zoneight234",
+  "7pqrstsixteen", 
+  "7eight7",     # 2 new test cases
+  "3stuffthree")
+```
+
+Okay, so let's define a list of valid 'digits', and their corresponding numeric values. 
+```{r}
+valid <- c("one","two","three","four","five","six","seven","eight","nine", as.character(1:9))
+valid.num <- c(1:9,1:9) 
+```
+
+And find where in the strings these valid values are located. 
+`stri_locate_first_regex` find the indexes (positions) where there is a match to some pattern. 
+I learned about this function from [Gus Lipkin's solution](https://adventofcode.guslipkin.me/2023/01/2023-01)
+
+```{r}
+x <- stri_locate_first_regex(exa2[1], valid)
+first <- which.min(x[,1])
+last  <- which.max(x[,2])
+cal.val <- as.numeric(paste0(valid.num[first], valid.num[last]))
+```
+
+So that gives me the correct first value. Now I need to apply this to each row. It's late, I'm tired so I'm gonna loop it. 
+
+```{r}
+n <- length(exa2)
+new.cal.vals <- rep(0, n)
+for(i in 1:n){
+	x <- stri_locate_first_regex(exa2[i], valid)
+	first <- which.min(x[,1])
+	last  <- which.max(x[,2])
+	new.cal.vals[i] <- as.numeric(paste0(valid.num[first], valid.num[last]))
+}
+cbind(exa2, new.cal.vals)
+sum(new.cal.vals)
+```
+
+Hooray! This matches the example solution. Now to do this for my actual data. 
+
+```{r}
+rm(new.cal.vals, x, first, last, i) # just cos
+N <- length(input)
+new.cal.vals <- rep(0, N)
+for(i in 1:N){
+	x <- stri_locate_first_regex(input[i], valid)
+	first <- which.min(x[,1])
+	last  <- which.max(x[,2])
+	new.cal.vals[i] <- as.numeric(paste0(valid.num[first], valid.num[last]))
+}
+sum(new.cal.vals)
+```
+
+❌ Nope. So I realized I was only using `stri_locate_first_regex` key is **first**. And so I was missing duplicates. I added a couple test cases `7eight7` and `3stuffthree`, and sure enough the last 7 wasn't getting caught. 
+
+```{r}
+n <- length(exa2)
+new.cal.vals <- rep(0, n)
+for(i in 1:n){
+	x <- stri_locate_all_regex(exa2[i], valid)
+	y <- unlist(x) |> matrix(ncol=2, byrow=TRUE) #the output of _all_ was different
+	first <- which.min(y[,1])
+	last  <- which.max(y[,2])
+	new.cal.vals[i] <- as.numeric(paste0(valid.num[first], valid.num[last]))
+}
+cbind(exa2, new.cal.vals)
+sum(new.cal.vals)
+```
+
+Looks promising. 
+
+```{r}
+rm(new.cal.vals, x, first, last, i, y, N) # just cos
+N <- length(input)
+new.cal.vals <- rep(0, N)
+for(i in 1:N){
+	x <- stri_locate_all_regex(input[i], valid)
+	y <- unlist(x) |> matrix(ncol=2, byrow=TRUE) 
+	first <- which.min(y[,1])
+	last  <- which.max(y[,2])
+	new.cal.vals[i] <- as.numeric(paste0(valid.num[first], valid.num[last]))
+}
+sum(new.cal.vals)
+```
+
+Uhm...if there were some rows without numbers, this should have failed earlier...
+
+```{r}
+is.miss <- which(is.na(new.cal.vals))
+input[is.miss][1:5]
+```
+
+Yea... no those for sure have numbers. Well heck. What is my function doing?  
+
+```{r}
+(x <- stri_locate_all_regex(input[is.miss[1]], valid))
+(y <- unlist(x) |> matrix(ncol=2, byrow=TRUE))
+```
+
+Yea.. duplicate values of the same number makes for additional rows in the matrix. But then why didn't it mess up with my examples? 🤔 
+
+Okay well let's use `head` and `tail` via `lapply` to pull the first and last rows out of each list element. 
+
+```{r}
+x <- stri_locate_all_regex(input[is.miss[1]], valid)
+x.first <- lapply(x, head, 1) |> unlist() |> matrix(ncol=2, byrow=TRUE)
+x.last  <- lapply(x, tail, 1) |> unlist() |> matrix(ncol=2, byrow=TRUE)
+first <- which.min(x.first[,1])
+last  <- which.max(x.last[,2])
+as.numeric(paste0(valid.num[first], valid.num[last]))
+input[is.miss[1]]
+```
+
+Third time is the charm? 🤞
+
+```{r}
+rm(new.cal.vals, x, first, last, i, y, N) # just cos
+N <- length(input)
+new.cal.vals <- rep(0, N)
+for(i in 1:N){
+	x <- stri_locate_all_regex(input[i], valid)
+	x.first <- lapply(x, head, 1) |> unlist() |> matrix(ncol=2, byrow=TRUE)
+	x.last  <- lapply(x, tail, 1) |> unlist() |> matrix(ncol=2, byrow=TRUE)
+	first <- which.min(x.first[,1])
+	last  <- which.max(x.last[,2])
+	new.cal.vals[i] <- as.numeric(paste0(valid.num[first], valid.num[last]))
+}
+sum(new.cal.vals)
+```
+
+⭐⭐
+
+
+##### Session info {.appendix}
+
+<details><summary>Toggle</summary>
+
+```{r}
+#| echo: false
+library(sessioninfo)
+# save the session info as an object
+pkg_session <- session_info(pkgs = "attached")
+
+# get the quarto version
+quarto_version <- system("quarto --version", intern = TRUE)
+
+# inject the quarto info
+pkg_session$platform$quarto <- paste(
+  system("quarto --version", intern = TRUE), 
+  "@", 
+  quarto::quarto_path()
+  )
+
+# print it out
+pkg_session
+```
+
+</details>
+
+
+
+
+
