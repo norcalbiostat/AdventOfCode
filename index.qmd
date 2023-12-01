@@ -1,6 +1,6 @@
 ---
 title: "Advent of Code"
-subtitle: "My solutions and notes"
+subtitle: "My walkthroughs"
 #description: "My solutions and notes for Advent of Code."
 code-tools: false
 ---
@@ -9,6 +9,9 @@ code-tools: false
 
 This website is created from the  [EllaKaye/advent-of-code-website-template](https://github.com/EllaKaye/advent-of-code-website-template) template repository. There's documentation on how to use and adapt the template in their repo README.
 
+This is less of a "just post the solution" and more of me "talking through" solving the problem. Often including some troubleshooting and/or dead ends. I blame the teacher in me that likes to show problem solving processes. 
+
+------
 
 # Advent of Code 2023
 
@@ -16,6 +19,8 @@ This website is created from the  [EllaKaye/advent-of-code-website-template](htt
 |--------------------------------|------------|------------|------------|
 | Day 1: Trebuchet?!             | 2023-12-01 |            | 2023-12-01 |
 
+
+------
 
 
 # Advent of Code 2022
