@@ -16,8 +16,8 @@ Each daily post contains my solution, along with the process.
 
 | Task Name                      | Start      | ⭐         | ⭐⭐       |
 |--------------------------------|------------|------------|------------|
-| Day 1: Trebuchet?!             | 2023-12-01 |            | 2023-12-01 |
-| Day 2: Cube Conundrum          | 2023-12-02 |            |  |
+| Day 1: Trebuchet?!             | 2023-12-01 | 2023-12-01 | 2023-12-01 |
+| Day 2: Cube Conundrum          | 2023-12-02 | 2023-12-02 | 2023-12-02 |
 
 
 
