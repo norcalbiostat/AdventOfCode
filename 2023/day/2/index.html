@@ -159,11 +159,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#part-1" id="toc-part-1" class="nav-link" data-scroll-target="#part-1">Part 1 ⭐</a>
   <ul class="collapse">
-  <li><a href="#w" id="toc-w" class="nav-link" data-scroll-target="#w">❓ W</a></li>
+  <li><a href="#which-games-would-have-been-possible-if-the-bag-contained-only-12-red-cubes-13-green-cubes-and-14-blue-cubes" id="toc-which-games-would-have-been-possible-if-the-bag-contained-only-12-red-cubes-13-green-cubes-and-14-blue-cubes" class="nav-link" data-scroll-target="#which-games-would-have-been-possible-if-the-bag-contained-only-12-red-cubes-13-green-cubes-and-14-blue-cubes">❓Which games would have been possible if the bag contained only 12 red cubes, 13 green cubes, and 14 blue cubes?</a></li>
   </ul></li>
   <li><a href="#part-2" id="toc-part-2" class="nav-link" data-scroll-target="#part-2">Part 2 ⭐⭐</a>
   <ul class="collapse">
-  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section">❓</a></li>
+  <li><a href="#what-is-the-fewest-number-of-cubes-of-each-color-that-could-have-been-in-the-bag-to-make-the-game-possible" id="toc-what-is-the-fewest-number-of-cubes-of-each-color-that-could-have-been-in-the-bag-to-make-the-game-possible" class="nav-link" data-scroll-target="#what-is-the-fewest-number-of-cubes-of-each-color-that-could-have-been-in-the-bag-to-make-the-game-possible">❓What is the fewest number of cubes of each color that could have been in the bag to make the game possible?</a></li>
   </ul></li>
   </ul></li>
   <li><a href="#walkthrough-explainer" id="toc-walkthrough-explainer" class="nav-link" data-scroll-target="#walkthrough-explainer">Walkthrough / Explainer</a>
@@ -181,8 +181,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="quarto-title">
 <div class="quarto-title-block"><div><h1 class="title">2023: Day 2 - Cube Conundrum</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
   <div class="quarto-categories">
-    <div class="quarto-category">TAG_1</div>
-    <div class="quarto-category">TAG_2</div>
+    <div class="quarto-category">dplyr</div>
+    <div class="quarto-category">tidyr</div>
   </div>
   </div>
 
@@ -211,57 +211,217 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <details open="">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(aochelpers)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># other options: aoc_input_data_frame(), aoc_input_matrix()</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>input <span class="ot">&lt;-</span> <span class="fu">aoc_input_vector</span>(<span class="dv">2</span>, <span class="dv">2023</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(input)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>input <span class="ot">&lt;-</span> <span class="fu">aoc_input_data_frame</span>(<span class="dv">2</span>, <span class="dv">2023</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(input)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "Game 1: 1 green, 4 blue; 1 blue, 2 green, 1 red; 1 red, 1 green, 2 blue; 1 green, 1 red; 1 green; 1 green, 1 blue, 1 red"                                 
-[2] "Game 2: 2 blue, 2 red, 6 green; 1 red, 6 green, 7 blue; 10 green, 8 blue, 1 red; 2 green, 18 blue, 2 red; 14 blue, 3 green, 1 red; 8 green, 1 red, 9 blue"
-[3] "Game 3: 6 green, 5 blue, 9 red; 4 blue, 1 green, 13 red; 9 green, 14 red, 1 blue"                                                                         
-[4] "Game 4: 14 green, 3 blue, 16 red; 20 red; 4 green, 2 red, 1 blue; 10 blue, 11 green, 18 red; 3 red, 3 blue, 6 green; 2 green, 18 red, 9 blue"             
-[5] "Game 5: 5 green, 4 blue; 1 red, 3 blue, 2 green; 4 green, 2 red, 15 blue; 11 blue, 8 green, 4 red; 4 red, 3 green; 4 red, 3 green, 7 blue"                
-[6] "Game 6: 6 blue, 10 green; 2 red, 6 green, 2 blue; 4 red, 4 blue, 1 green; 2 blue, 7 green, 2 red"                                                         </code></pre>
+<pre><code># A tibble: 6 × 2
+  X1     X2                                                                     
+  &lt;chr&gt;  &lt;chr&gt;                                                                  
+1 Game 1 " 1 green, 4 blue; 1 blue, 2 green, 1 red; 1 red, 1 green, 2 blue; 1 g…
+2 Game 2 " 2 blue, 2 red, 6 green; 1 red, 6 green, 7 blue; 10 green, 8 blue, 1 …
+3 Game 3 " 6 green, 5 blue, 9 red; 4 blue, 1 green, 13 red; 9 green, 14 red, 1 …
+4 Game 4 " 14 green, 3 blue, 16 red; 20 red; 4 green, 2 red, 1 blue; 10 blue, 1…
+5 Game 5 " 5 green, 4 blue; 1 red, 3 blue, 2 green; 4 green, 2 red, 15 blue; 11…
+6 Game 6 " 6 blue, 10 green; 2 red, 6 green, 2 blue; 4 red, 4 blue, 1 green; 2 …</code></pre>
 </div>
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(input) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"game"</span>, <span class="st">"set"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 </section>
 <section id="tldr-solutions" class="level1">
 <h1>TLDR; Solutions</h1>
 <section id="part-1" class="level2">
 <h2 class="anchored" data-anchor-id="part-1">Part 1 ⭐</h2>
-<section id="w" class="level3 callout-danger">
-<h3 class="anchored" data-anchor-id="w">❓ W</h3>
+<section id="which-games-would-have-been-possible-if-the-bag-contained-only-12-red-cubes-13-green-cubes-and-14-blue-cubes" class="level3 callout-danger">
+<h3 class="anchored" data-anchor-id="which-games-would-have-been-possible-if-the-bag-contained-only-12-red-cubes-13-green-cubes-and-14-blue-cubes">❓Which games would have been possible if the bag contained only 12 red cubes, 13 green cubes, and 14 blue cubes?</h3>
 </section>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>set.results <span class="ot">&lt;-</span> input <span class="sc">|&gt;</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># get game numbers</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">game =</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">"Game "</span>,<span class="st">""</span>, game))) <span class="sc">|&gt;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># split out the sets</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">separate_wider_delim</span>(set, <span class="at">delim =</span> <span class="st">";"</span>, <span class="at">names_sep =</span> <span class="st">""</span>, <span class="at">too_few =</span> <span class="st">"align_start"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># one row per set</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="fu">contains</span>(<span class="st">"set"</span>), <span class="at">names_to =</span> <span class="st">"set"</span>, <span class="at">values_to =</span> <span class="st">"cube"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># split out the colors</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">separate_wider_delim</span>(cube, <span class="at">delim =</span> <span class="st">","</span>, <span class="at">names_sep =</span> <span class="st">""</span>, <span class="at">too_few =</span> <span class="st">"align_start"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># one row per cube</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(cube1<span class="sc">:</span>cube3, <span class="at">names_to =</span> <span class="st">"cube"</span>, <span class="at">values_to =</span> <span class="st">"color"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># cleanup</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">color =</span> <span class="fu">trimws</span>(color)) <span class="sc">|&gt;</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>cube) <span class="sc">|&gt;</span> </span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">na.omit</span>() <span class="sc">|&gt;</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># split out number of colors now</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">separate_wider_delim</span>(color, <span class="at">delim =</span> <span class="st">" "</span>, <span class="at">names_sep =</span> <span class="st">""</span>, <span class="at">too_few =</span> <span class="st">"align_start"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">color1 =</span> <span class="fu">as.numeric</span>(color1)) <span class="sc">|&gt;</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># put colors into separate columns</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> color2, <span class="at">values_from =</span> color1) <span class="sc">|&gt;</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">replace_na</span>(<span class="fu">list</span>(<span class="at">blue=</span><span class="dv">0</span>, <span class="at">red=</span><span class="dv">0</span>, <span class="at">green=</span><span class="dv">0</span>))</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    set.results <span class="sc">%&gt;%</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">validity =</span> <span class="fu">ifelse</span>(red <span class="sc">&gt;</span><span class="dv">12</span> <span class="sc">|</span> green <span class="sc">&gt;</span> <span class="dv">13</span> <span class="sc">|</span> blue <span class="sc">&gt;</span><span class="dv">14</span>, </span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>                                                     <span class="st">"invalid"</span>, <span class="st">"valid"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># flag games with invalid combos</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(game) <span class="sc">|&gt;</span> <span class="fu">summarize</span>(<span class="at">n.invalid =</span> <span class="fu">sum</span>(validity<span class="sc">==</span><span class="st">"invalid"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># keep only valid games</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(n.invalid <span class="sc">==</span><span class="dv">0</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># solution input is the sum of valid game numbers</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="fu">sum</span>(game))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+  `sum(game)`
+        &lt;dbl&gt;
+1        2486</code></pre>
+</div>
+</div>
 </section>
 <section id="part-2" class="level2">
 <h2 class="anchored" data-anchor-id="part-2">Part 2 ⭐⭐</h2>
-<section id="section" class="level3 callout-danger">
-<h3 class="anchored" data-anchor-id="section">❓</h3>
+<section id="what-is-the-fewest-number-of-cubes-of-each-color-that-could-have-been-in-the-bag-to-make-the-game-possible" class="level3 callout-danger">
+<h3 class="anchored" data-anchor-id="what-is-the-fewest-number-of-cubes-of-each-color-that-could-have-been-in-the-bag-to-make-the-game-possible">❓What is the fewest number of cubes of each color that could have been in the bag to make the game possible?</h3>
 </section>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>set.results <span class="sc">|&gt;</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(game) <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># find max number of each color per game</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">min.green =</span> <span class="fu">max</span>(green), </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">min.red =</span> <span class="fu">max</span>(red), </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">min.blue =</span> <span class="fu">max</span>(blue)) <span class="sc">|&gt;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># calculate submission value</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">power =</span> min.green<span class="sc">*</span>min.red<span class="sc">*</span>min.blue) <span class="sc">|&gt;</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="fu">sum</span>(power))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+  `sum(power)`
+         &lt;dbl&gt;
+1        87984</code></pre>
+</div>
+</div>
 </section>
 </section>
 <section id="walkthrough-explainer" class="level1">
 <h1>Walkthrough / Explainer</h1>
-<p>I was launched successfully to Snow Island, which has a noticeable lack of snow.</p>
+<p>I was launched successfully to Snow Island, which has a noticeable lack of snow. While we’re walking I’m playing a game with a local Elf. “Guess how many cubes are in the bag”. Kinda..</p>
 <section id="part-1-1" class="level2">
 <h2 class="anchored" data-anchor-id="part-1-1">Part 1</h2>
 <p>:::{.callout-exa icon=true} Example Data</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>exa <span class="ot">&lt;-</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>exa <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">input =</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>        <span class="fu">c</span>(<span class="st">"Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green"</span>, </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue"</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red"</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red"</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green"</span>))</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>exa <span class="ot">&lt;-</span> exa <span class="sc">|&gt;</span> </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">separate_wider_delim</span>(input, <span class="at">delim =</span> <span class="st">":"</span>, <span class="at">names =</span> <span class="fu">c</span>(<span class="st">"game"</span>, <span class="st">"set"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-</section>
-<section id="part-2-1" class="level2">
-<h2 class="anchored" data-anchor-id="part-2-1">Part 2</h2>
-<p>:::{.callout-exa icon=true} Example Data</p>
+<p>:::</p>
+<p>My solution I think is going to use a series of <code>separates</code> and <code>pivot</code>ing to get the games as rows, colors on the columns and number of colors as values. Then I can compare each row with the total number of cubes to see which games were possible.</p>
+<p>Get number of each color cube per game/set combo.</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>exa <span class="ot">&lt;-</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>    <span class="co"># get game numbers</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>set.results <span class="ot">&lt;-</span> input <span class="sc">|&gt;</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">game =</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">"Game "</span>,<span class="st">""</span>, game))) <span class="sc">|&gt;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># split out the sets</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">separate_wider_delim</span>(set, <span class="at">delim =</span> <span class="st">";"</span>, <span class="at">names_sep =</span> <span class="st">""</span>, <span class="at">too_few =</span> <span class="st">"align_start"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># one row per set</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="fu">contains</span>(<span class="st">"set"</span>), <span class="at">names_to =</span> <span class="st">"set"</span>, <span class="at">values_to =</span> <span class="st">"cube"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># split out the colors</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">separate_wider_delim</span>(cube, <span class="at">delim =</span> <span class="st">","</span>, <span class="at">names_sep =</span> <span class="st">""</span>, <span class="at">too_few =</span> <span class="st">"align_start"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># one row per cube</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(cube1<span class="sc">:</span>cube3, <span class="at">names_to =</span> <span class="st">"cube"</span>, <span class="at">values_to =</span> <span class="st">"color"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># cleanup</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">color =</span> <span class="fu">trimws</span>(color)) <span class="sc">|&gt;</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>cube) <span class="sc">|&gt;</span> </span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">na.omit</span>() <span class="sc">|&gt;</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># split out number of colors now</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">separate_wider_delim</span>(color, <span class="at">delim =</span> <span class="st">" "</span>, <span class="at">names_sep =</span> <span class="st">""</span>, <span class="at">too_few =</span> <span class="st">"align_start"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">color1 =</span> <span class="fu">as.numeric</span>(color1)) <span class="sc">|&gt;</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># put colors into separate columns</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> color2, <span class="at">values_from =</span> color1) <span class="sc">|&gt;</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">replace_na</span>(<span class="fu">list</span>(<span class="at">blue=</span><span class="dv">0</span>, <span class="at">red=</span><span class="dv">0</span>, <span class="at">green=</span><span class="dv">0</span>))</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(set.results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 5
+   game set   green  blue   red
+  &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1     1 set1      1     4     0
+2     1 set2      2     1     1
+3     1 set3      1     2     1
+4     1 set4      1     0     1
+5     1 set5      1     0     0
+6     1 set6      1     1     1</code></pre>
 </div>
+</div>
+<p>Now compare each set result against the proposed pool of 12 red cubes, 13 green cubes, and 14 blue cubes.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>set.results <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">validity =</span> <span class="fu">ifelse</span>(red <span class="sc">&gt;</span><span class="dv">12</span> <span class="sc">|</span> green <span class="sc">&gt;</span> <span class="dv">13</span> <span class="sc">|</span> blue <span class="sc">&gt;</span><span class="dv">14</span>, </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                                                     <span class="st">"invalid"</span>, <span class="st">"valid"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># flag games with invalid combos</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(game) <span class="sc">|&gt;</span> <span class="fu">summarize</span>(<span class="at">n.invalid =</span> <span class="fu">sum</span>(validity<span class="sc">==</span><span class="st">"invalid"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># keep only valid games</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(n.invalid <span class="sc">==</span><span class="dv">0</span>) <span class="sc">|&gt;</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># solution input is the sum of valid game numbers</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="fu">sum</span>(game))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+  `sum(game)`
+        &lt;dbl&gt;
+1        2486</code></pre>
+</div>
+</div>
+<p>⭐</p>
+</section>
+<section id="part-2-1" class="level2">
+<h2 class="anchored" data-anchor-id="part-2-1">Part 2</h2>
+<p>So I find out that much like California, they’re in a drought. So no water, no snow. So while we go check on the water, the elf asks another question about said game. What is the fewest number of cubes of each color that could have been in the bag to make the game possible?</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>set.results <span class="sc">|&gt;</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(game) <span class="sc">|&gt;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># find max number of each color per game</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">min.green =</span> <span class="fu">max</span>(green), </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">min.red =</span> <span class="fu">max</span>(red), </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">min.blue =</span> <span class="fu">max</span>(blue)) <span class="sc">|&gt;</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># calculate submission value</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">power =</span> min.green<span class="sc">*</span>min.red<span class="sc">*</span>min.blue) <span class="sc">|&gt;</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="fu">sum</span>(power))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+  `sum(power)`
+         &lt;dbl&gt;
+1        87984</code></pre>
+</div>
+</div>
+<p>Right on the first try! Today’s challenge was relativly straight forward, and my approach to the first challenge made the second part very easy.</p>
+<p>⭐⭐</p>
 
 </section>
 </section>
@@ -290,6 +450,8 @@ Toggle
 ─ Packages ───────────────────────────────────────────────────────────────────
  package    * version    date (UTC) lib source
  aochelpers * 0.1.0.9000 2023-11-30 [1] Github (EllaKaye/aochelpers@c2afc01)
+ dplyr      * 1.1.2      2023-04-20 [1] CRAN (R 4.3.1)
+ tidyr      * 1.3.0      2023-01-24 [1] CRAN (R 4.3.1)
 
  [1] C:/Users/renta/AppData/Local/R/win-library/4.3
  [2] C:/Program Files/R/R-4.3.1/library
@@ -716,83 +878,190 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
 });
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb6" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "2023: Day 2 - Cube Conundrum"</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> 2023-12-2</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">  - TAG_1</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">  - TAG_2</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="an">draft:</span><span class="co"> true</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="fu">## Setup</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">The original challenge</span><span class="co">](https://adventofcode.com/2023/day/2)</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(aochelpers)</span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co"># other options: aoc_input_data_frame(), aoc_input_matrix()</span></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>input <span class="ot">&lt;-</span> <span class="fu">aoc_input_vector</span>(<span class="dv">2</span>, <span class="dv">2023</span>)</span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(input)</span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="fu"># TLDR; Solutions</span></span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="fu">## Part 1 ⭐</span></span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>::: {.callout-danger}</span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="fu">### ❓  W</span></span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="fu">## Part 2 ⭐⭐</span></span>
-<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>::: {.callout-danger}</span>
-<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a><span class="fu">### ❓  </span></span>
-<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a><span class="fu"># Walkthrough / Explainer</span></span>
-<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>I was launched successfully to Snow Island, which has a noticeable lack of snow.</span>
-<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a><span class="fu">## Part 1</span></span>
-<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>:::{.callout-exa icon=true}</span>
-<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>Example Data</span>
-<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>exa <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a><span class="fu">## Part 2</span></span>
-<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a>:::{.callout-exa icon=true}</span>
-<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>Example Data</span>
-<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>exa <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a><span class="fu">##### Session info {.appendix}</span></span>
-<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;&lt;summary&gt;</span>Toggle<span class="kw">&lt;/summary&gt;</span></span>
-<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a>sessioninfo<span class="sc">::</span><span class="fu">session_info</span>(<span class="at">pkgs =</span> <span class="st">"attached"</span>)</span>
-<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
-<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a></span>
+<div class="sourceCode" id="cb16" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "2023: Day 2 - Cube Conundrum"</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> 2023-12-2</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co">  - dplyr</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co">  - tidyr</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="an">draft:</span><span class="co"> false</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="fu">## Setup</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">The original challenge</span><span class="co">](https://adventofcode.com/2023/day/2)</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(aochelpers)</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>input <span class="ot">&lt;-</span> <span class="fu">aoc_input_data_frame</span>(<span class="dv">2</span>, <span class="dv">2023</span>)</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(input)</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(input) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"game"</span>, <span class="st">"set"</span>)</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="fu"># TLDR; Solutions</span></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a><span class="fu">## Part 1 ⭐</span></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>::: callout-danger</span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a><span class="fu">### ❓Which games would have been possible if the bag contained only 12 red cubes, 13 green cubes, and 14 blue cubes?</span></span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>set.results <span class="ot">&lt;-</span> input <span class="sc">|&gt;</span> </span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>    <span class="co"># get game numbers</span></span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">game =</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">"Game "</span>,<span class="st">""</span>, game))) <span class="sc">|&gt;</span></span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>    <span class="co"># split out the sets</span></span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">separate_wider_delim</span>(set, <span class="at">delim =</span> <span class="st">";"</span>, <span class="at">names_sep =</span> <span class="st">""</span>, <span class="at">too_few =</span> <span class="st">"align_start"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>    <span class="co"># one row per set</span></span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="fu">contains</span>(<span class="st">"set"</span>), <span class="at">names_to =</span> <span class="st">"set"</span>, <span class="at">values_to =</span> <span class="st">"cube"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>    <span class="co"># split out the colors</span></span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>    <span class="fu">separate_wider_delim</span>(cube, <span class="at">delim =</span> <span class="st">","</span>, <span class="at">names_sep =</span> <span class="st">""</span>, <span class="at">too_few =</span> <span class="st">"align_start"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>    <span class="co"># one row per cube</span></span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(cube1<span class="sc">:</span>cube3, <span class="at">names_to =</span> <span class="st">"cube"</span>, <span class="at">values_to =</span> <span class="st">"color"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a>    <span class="co"># cleanup</span></span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">color =</span> <span class="fu">trimws</span>(color)) <span class="sc">|&gt;</span></span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>cube) <span class="sc">|&gt;</span> </span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a>    <span class="fu">na.omit</span>() <span class="sc">|&gt;</span></span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a>    <span class="co"># split out number of colors now</span></span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a>    <span class="fu">separate_wider_delim</span>(color, <span class="at">delim =</span> <span class="st">" "</span>, <span class="at">names_sep =</span> <span class="st">""</span>, <span class="at">too_few =</span> <span class="st">"align_start"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">color1 =</span> <span class="fu">as.numeric</span>(color1)) <span class="sc">|&gt;</span></span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a>    <span class="co"># put colors into separate columns</span></span>
+<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> color2, <span class="at">values_from =</span> color1) <span class="sc">|&gt;</span></span>
+<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a>    <span class="fu">replace_na</span>(<span class="fu">list</span>(<span class="at">blue=</span><span class="dv">0</span>, <span class="at">red=</span><span class="dv">0</span>, <span class="at">green=</span><span class="dv">0</span>))</span>
+<span id="cb16-57"><a href="#cb16-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-58"><a href="#cb16-58" aria-hidden="true" tabindex="-1"></a>    set.results <span class="sc">%&gt;%</span></span>
+<span id="cb16-59"><a href="#cb16-59" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">validity =</span> <span class="fu">ifelse</span>(red <span class="sc">&gt;</span><span class="dv">12</span> <span class="sc">|</span> green <span class="sc">&gt;</span> <span class="dv">13</span> <span class="sc">|</span> blue <span class="sc">&gt;</span><span class="dv">14</span>, </span>
+<span id="cb16-60"><a href="#cb16-60" aria-hidden="true" tabindex="-1"></a>                                                     <span class="st">"invalid"</span>, <span class="st">"valid"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb16-61"><a href="#cb16-61" aria-hidden="true" tabindex="-1"></a>    <span class="co"># flag games with invalid combos</span></span>
+<span id="cb16-62"><a href="#cb16-62" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(game) <span class="sc">|&gt;</span> <span class="fu">summarize</span>(<span class="at">n.invalid =</span> <span class="fu">sum</span>(validity<span class="sc">==</span><span class="st">"invalid"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb16-63"><a href="#cb16-63" aria-hidden="true" tabindex="-1"></a>    <span class="co"># keep only valid games</span></span>
+<span id="cb16-64"><a href="#cb16-64" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb16-65"><a href="#cb16-65" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(n.invalid <span class="sc">==</span><span class="dv">0</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-66"><a href="#cb16-66" aria-hidden="true" tabindex="-1"></a>    <span class="co"># solution input is the sum of valid game numbers</span></span>
+<span id="cb16-67"><a href="#cb16-67" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="fu">sum</span>(game))</span>
+<span id="cb16-68"><a href="#cb16-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-69"><a href="#cb16-69" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-70"><a href="#cb16-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-71"><a href="#cb16-71" aria-hidden="true" tabindex="-1"></a><span class="fu">## Part 2 ⭐⭐</span></span>
+<span id="cb16-72"><a href="#cb16-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-73"><a href="#cb16-73" aria-hidden="true" tabindex="-1"></a>::: callout-danger</span>
+<span id="cb16-74"><a href="#cb16-74" aria-hidden="true" tabindex="-1"></a><span class="fu">### ❓What is the fewest number of cubes of each color that could have been in the bag to make the game possible?</span></span>
+<span id="cb16-75"><a href="#cb16-75" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb16-76"><a href="#cb16-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-79"><a href="#cb16-79" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-80"><a href="#cb16-80" aria-hidden="true" tabindex="-1"></a>set.results <span class="sc">|&gt;</span> </span>
+<span id="cb16-81"><a href="#cb16-81" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(game) <span class="sc">|&gt;</span></span>
+<span id="cb16-82"><a href="#cb16-82" aria-hidden="true" tabindex="-1"></a>    <span class="co"># find max number of each color per game</span></span>
+<span id="cb16-83"><a href="#cb16-83" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">min.green =</span> <span class="fu">max</span>(green), </span>
+<span id="cb16-84"><a href="#cb16-84" aria-hidden="true" tabindex="-1"></a>                 <span class="at">min.red =</span> <span class="fu">max</span>(red), </span>
+<span id="cb16-85"><a href="#cb16-85" aria-hidden="true" tabindex="-1"></a>                 <span class="at">min.blue =</span> <span class="fu">max</span>(blue)) <span class="sc">|&gt;</span></span>
+<span id="cb16-86"><a href="#cb16-86" aria-hidden="true" tabindex="-1"></a>    <span class="co"># calculate submission value</span></span>
+<span id="cb16-87"><a href="#cb16-87" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">power =</span> min.green<span class="sc">*</span>min.red<span class="sc">*</span>min.blue) <span class="sc">|&gt;</span></span>
+<span id="cb16-88"><a href="#cb16-88" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="fu">sum</span>(power))</span>
+<span id="cb16-89"><a href="#cb16-89" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-90"><a href="#cb16-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-91"><a href="#cb16-91" aria-hidden="true" tabindex="-1"></a><span class="fu"># Walkthrough / Explainer</span></span>
+<span id="cb16-92"><a href="#cb16-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-93"><a href="#cb16-93" aria-hidden="true" tabindex="-1"></a>I was launched successfully to Snow Island, which has a noticeable lack of snow. While we're walking I'm playing a game with a local Elf. "Guess how many cubes are in the bag". Kinda..</span>
+<span id="cb16-94"><a href="#cb16-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-95"><a href="#cb16-95" aria-hidden="true" tabindex="-1"></a><span class="fu">## Part 1</span></span>
+<span id="cb16-96"><a href="#cb16-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-97"><a href="#cb16-97" aria-hidden="true" tabindex="-1"></a>:::{.callout-exa icon=true} Example Data</span>
+<span id="cb16-98"><a href="#cb16-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-101"><a href="#cb16-101" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-102"><a href="#cb16-102" aria-hidden="true" tabindex="-1"></a>exa <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">input =</span> </span>
+<span id="cb16-103"><a href="#cb16-103" aria-hidden="true" tabindex="-1"></a>        <span class="fu">c</span>(<span class="st">"Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green"</span>, </span>
+<span id="cb16-104"><a href="#cb16-104" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue"</span>,</span>
+<span id="cb16-105"><a href="#cb16-105" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red"</span>,</span>
+<span id="cb16-106"><a href="#cb16-106" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red"</span>,</span>
+<span id="cb16-107"><a href="#cb16-107" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green"</span>))</span>
+<span id="cb16-108"><a href="#cb16-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-109"><a href="#cb16-109" aria-hidden="true" tabindex="-1"></a>exa <span class="ot">&lt;-</span> exa <span class="sc">|&gt;</span> </span>
+<span id="cb16-110"><a href="#cb16-110" aria-hidden="true" tabindex="-1"></a>    <span class="fu">separate_wider_delim</span>(input, <span class="at">delim =</span> <span class="st">":"</span>, <span class="at">names =</span> <span class="fu">c</span>(<span class="st">"game"</span>, <span class="st">"set"</span>))</span>
+<span id="cb16-111"><a href="#cb16-111" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-112"><a href="#cb16-112" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb16-113"><a href="#cb16-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-114"><a href="#cb16-114" aria-hidden="true" tabindex="-1"></a>My solution I think is going to use a series of <span class="in">`separates`</span> and <span class="in">`pivot`</span>ing to get the games as rows, colors on the columns and number of colors as values. Then I can compare each row with the total number of cubes to see which games were possible. </span>
+<span id="cb16-115"><a href="#cb16-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-116"><a href="#cb16-116" aria-hidden="true" tabindex="-1"></a>Get number of each color cube per game/set combo.</span>
+<span id="cb16-119"><a href="#cb16-119" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-120"><a href="#cb16-120" aria-hidden="true" tabindex="-1"></a>    <span class="co"># get game numbers</span></span>
+<span id="cb16-121"><a href="#cb16-121" aria-hidden="true" tabindex="-1"></a>set.results <span class="ot">&lt;-</span> input <span class="sc">|&gt;</span> </span>
+<span id="cb16-122"><a href="#cb16-122" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">game =</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">"Game "</span>,<span class="st">""</span>, game))) <span class="sc">|&gt;</span></span>
+<span id="cb16-123"><a href="#cb16-123" aria-hidden="true" tabindex="-1"></a>    <span class="co"># split out the sets</span></span>
+<span id="cb16-124"><a href="#cb16-124" aria-hidden="true" tabindex="-1"></a>    <span class="fu">separate_wider_delim</span>(set, <span class="at">delim =</span> <span class="st">";"</span>, <span class="at">names_sep =</span> <span class="st">""</span>, <span class="at">too_few =</span> <span class="st">"align_start"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-125"><a href="#cb16-125" aria-hidden="true" tabindex="-1"></a>    <span class="co"># one row per set</span></span>
+<span id="cb16-126"><a href="#cb16-126" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="fu">contains</span>(<span class="st">"set"</span>), <span class="at">names_to =</span> <span class="st">"set"</span>, <span class="at">values_to =</span> <span class="st">"cube"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-127"><a href="#cb16-127" aria-hidden="true" tabindex="-1"></a>    <span class="co"># split out the colors</span></span>
+<span id="cb16-128"><a href="#cb16-128" aria-hidden="true" tabindex="-1"></a>    <span class="fu">separate_wider_delim</span>(cube, <span class="at">delim =</span> <span class="st">","</span>, <span class="at">names_sep =</span> <span class="st">""</span>, <span class="at">too_few =</span> <span class="st">"align_start"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-129"><a href="#cb16-129" aria-hidden="true" tabindex="-1"></a>    <span class="co"># one row per cube</span></span>
+<span id="cb16-130"><a href="#cb16-130" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(cube1<span class="sc">:</span>cube3, <span class="at">names_to =</span> <span class="st">"cube"</span>, <span class="at">values_to =</span> <span class="st">"color"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-131"><a href="#cb16-131" aria-hidden="true" tabindex="-1"></a>    <span class="co"># cleanup</span></span>
+<span id="cb16-132"><a href="#cb16-132" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">color =</span> <span class="fu">trimws</span>(color)) <span class="sc">|&gt;</span></span>
+<span id="cb16-133"><a href="#cb16-133" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>cube) <span class="sc">|&gt;</span> </span>
+<span id="cb16-134"><a href="#cb16-134" aria-hidden="true" tabindex="-1"></a>    <span class="fu">na.omit</span>() <span class="sc">|&gt;</span></span>
+<span id="cb16-135"><a href="#cb16-135" aria-hidden="true" tabindex="-1"></a>    <span class="co"># split out number of colors now</span></span>
+<span id="cb16-136"><a href="#cb16-136" aria-hidden="true" tabindex="-1"></a>    <span class="fu">separate_wider_delim</span>(color, <span class="at">delim =</span> <span class="st">" "</span>, <span class="at">names_sep =</span> <span class="st">""</span>, <span class="at">too_few =</span> <span class="st">"align_start"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-137"><a href="#cb16-137" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">color1 =</span> <span class="fu">as.numeric</span>(color1)) <span class="sc">|&gt;</span></span>
+<span id="cb16-138"><a href="#cb16-138" aria-hidden="true" tabindex="-1"></a>    <span class="co"># put colors into separate columns</span></span>
+<span id="cb16-139"><a href="#cb16-139" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> color2, <span class="at">values_from =</span> color1) <span class="sc">|&gt;</span></span>
+<span id="cb16-140"><a href="#cb16-140" aria-hidden="true" tabindex="-1"></a>    <span class="fu">replace_na</span>(<span class="fu">list</span>(<span class="at">blue=</span><span class="dv">0</span>, <span class="at">red=</span><span class="dv">0</span>, <span class="at">green=</span><span class="dv">0</span>))</span>
+<span id="cb16-141"><a href="#cb16-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-142"><a href="#cb16-142" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(set.results)</span>
+<span id="cb16-143"><a href="#cb16-143" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-144"><a href="#cb16-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-145"><a href="#cb16-145" aria-hidden="true" tabindex="-1"></a>Now compare each set result against the proposed pool of 12 red cubes, 13 green cubes, and 14 blue cubes. </span>
+<span id="cb16-146"><a href="#cb16-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-149"><a href="#cb16-149" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-150"><a href="#cb16-150" aria-hidden="true" tabindex="-1"></a>set.results <span class="sc">%&gt;%</span></span>
+<span id="cb16-151"><a href="#cb16-151" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">validity =</span> <span class="fu">ifelse</span>(red <span class="sc">&gt;</span><span class="dv">12</span> <span class="sc">|</span> green <span class="sc">&gt;</span> <span class="dv">13</span> <span class="sc">|</span> blue <span class="sc">&gt;</span><span class="dv">14</span>, </span>
+<span id="cb16-152"><a href="#cb16-152" aria-hidden="true" tabindex="-1"></a>                                                     <span class="st">"invalid"</span>, <span class="st">"valid"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb16-153"><a href="#cb16-153" aria-hidden="true" tabindex="-1"></a>    <span class="co"># flag games with invalid combos</span></span>
+<span id="cb16-154"><a href="#cb16-154" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(game) <span class="sc">|&gt;</span> <span class="fu">summarize</span>(<span class="at">n.invalid =</span> <span class="fu">sum</span>(validity<span class="sc">==</span><span class="st">"invalid"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb16-155"><a href="#cb16-155" aria-hidden="true" tabindex="-1"></a>    <span class="co"># keep only valid games</span></span>
+<span id="cb16-156"><a href="#cb16-156" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb16-157"><a href="#cb16-157" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(n.invalid <span class="sc">==</span><span class="dv">0</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-158"><a href="#cb16-158" aria-hidden="true" tabindex="-1"></a>    <span class="co"># solution input is the sum of valid game numbers</span></span>
+<span id="cb16-159"><a href="#cb16-159" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="fu">sum</span>(game))</span>
+<span id="cb16-160"><a href="#cb16-160" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-161"><a href="#cb16-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-162"><a href="#cb16-162" aria-hidden="true" tabindex="-1"></a>⭐</span>
+<span id="cb16-163"><a href="#cb16-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-164"><a href="#cb16-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-165"><a href="#cb16-165" aria-hidden="true" tabindex="-1"></a><span class="fu">## Part 2</span></span>
+<span id="cb16-166"><a href="#cb16-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-167"><a href="#cb16-167" aria-hidden="true" tabindex="-1"></a>So I find out that much like California, they're in a drought. So no water, no snow. So while we go check on the water, the elf asks another question about said game. What is the fewest number of cubes of each color that could have been in the bag to make the game possible?</span>
+<span id="cb16-168"><a href="#cb16-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-171"><a href="#cb16-171" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-172"><a href="#cb16-172" aria-hidden="true" tabindex="-1"></a>set.results <span class="sc">|&gt;</span> </span>
+<span id="cb16-173"><a href="#cb16-173" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(game) <span class="sc">|&gt;</span></span>
+<span id="cb16-174"><a href="#cb16-174" aria-hidden="true" tabindex="-1"></a>    <span class="co"># find max number of each color per game</span></span>
+<span id="cb16-175"><a href="#cb16-175" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">min.green =</span> <span class="fu">max</span>(green), </span>
+<span id="cb16-176"><a href="#cb16-176" aria-hidden="true" tabindex="-1"></a>                 <span class="at">min.red =</span> <span class="fu">max</span>(red), </span>
+<span id="cb16-177"><a href="#cb16-177" aria-hidden="true" tabindex="-1"></a>                 <span class="at">min.blue =</span> <span class="fu">max</span>(blue)) <span class="sc">|&gt;</span></span>
+<span id="cb16-178"><a href="#cb16-178" aria-hidden="true" tabindex="-1"></a>    <span class="co"># calculate submission value</span></span>
+<span id="cb16-179"><a href="#cb16-179" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">power =</span> min.green<span class="sc">*</span>min.red<span class="sc">*</span>min.blue) <span class="sc">|&gt;</span></span>
+<span id="cb16-180"><a href="#cb16-180" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="fu">sum</span>(power))</span>
+<span id="cb16-181"><a href="#cb16-181" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-182"><a href="#cb16-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-183"><a href="#cb16-183" aria-hidden="true" tabindex="-1"></a>Right on the first try! Today's challenge was relativly straight forward, and my approach to the first challenge made the second part very easy. </span>
+<span id="cb16-184"><a href="#cb16-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-185"><a href="#cb16-185" aria-hidden="true" tabindex="-1"></a>⭐⭐</span>
+<span id="cb16-186"><a href="#cb16-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-187"><a href="#cb16-187" aria-hidden="true" tabindex="-1"></a><span class="fu">##### Session info {.appendix}</span></span>
+<span id="cb16-188"><a href="#cb16-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-189"><a href="#cb16-189" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;</span></span>
+<span id="cb16-190"><a href="#cb16-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-191"><a href="#cb16-191" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;summary&gt;</span>Toggle<span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb16-192"><a href="#cb16-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-195"><a href="#cb16-195" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-196"><a href="#cb16-196" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb16-197"><a href="#cb16-197" aria-hidden="true" tabindex="-1"></a>sessioninfo<span class="sc">::</span><span class="fu">session_info</span>(<span class="at">pkgs =</span> <span class="st">"attached"</span>)</span>
+<span id="cb16-198"><a href="#cb16-198" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-199"><a href="#cb16-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-200"><a href="#cb16-200" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

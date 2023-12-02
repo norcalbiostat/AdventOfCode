@@ -2,30 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://norcalbiostat.github.io/AdventOfCode/index.html</loc>
-    <lastmod>2023-12-02T17:27:05.343Z</lastmod>
+    <lastmod>2023-12-02T20:08:52.931Z</lastmod>
   </url>
   <url>
     <loc>https://norcalbiostat.github.io/AdventOfCode/fonts/LICENSE.html</loc>
-    <lastmod>2023-12-02T17:27:04.238Z</lastmod>
+    <lastmod>2023-12-02T20:08:50.859Z</lastmod>
+  </url>
+  <url>
+    <loc>https://norcalbiostat.github.io/AdventOfCode/2023/day/2/index.html</loc>
+    <lastmod>2023-12-02T20:08:48.793Z</lastmod>
   </url>
   <url>
     <loc>https://norcalbiostat.github.io/AdventOfCode/2022.html</loc>
-    <lastmod>2023-12-02T17:27:00.571Z</lastmod>
+    <lastmod>2023-12-02T20:08:44.763Z</lastmod>
   </url>
   <url>
     <loc>https://norcalbiostat.github.io/AdventOfCode/2022/day/1/index.html</loc>
-    <lastmod>2023-12-02T17:26:59.463Z</lastmod>
+    <lastmod>2023-12-02T20:08:43.793Z</lastmod>
   </url>
   <url>
     <loc>https://norcalbiostat.github.io/AdventOfCode/2023/day/1/index.html</loc>
-    <lastmod>2023-12-02T17:27:01.988Z</lastmod>
+    <lastmod>2023-12-02T20:08:46.969Z</lastmod>
   </url>
   <url>
     <loc>https://norcalbiostat.github.io/AdventOfCode/2023.html</loc>
-    <lastmod>2023-12-02T17:27:03.551Z</lastmod>
+    <lastmod>2023-12-02T20:08:49.791Z</lastmod>
   </url>
   <url>
     <loc>https://norcalbiostat.github.io/AdventOfCode/fonts/Readme.html</loc>
-    <lastmod>2023-12-02T17:27:04.775Z</lastmod>
+    <lastmod>2023-12-02T20:08:51.878Z</lastmod>
   </url>
 </urlset>
