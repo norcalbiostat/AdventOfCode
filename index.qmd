@@ -1,15 +1,14 @@
 ---
 title: "Advent of Code"
-subtitle: "My walkthroughs"
-#description: "My solutions and notes for Advent of Code."
+subtitle: "My solutions and notes"
+description: "My solutions and notes stuff"
 code-tools: false
 ---
 
 [Advent of Code](https://adventofcode.com) is a series of increasingly difficult programming challenges, released daily each year throughout December in the run-up to Christmas.
 
-This website is created from the  [EllaKaye/advent-of-code-website-template](https://github.com/EllaKaye/advent-of-code-website-template) template repository. There's documentation on how to use and adapt the template in their repo README.
 
-This is less of a "just post the solution" and more of me "talking through" solving the problem. Often including some troubleshooting and/or dead ends. I blame the teacher in me that likes to show problem solving processes. 
+Each daily post contains my solution, along with the process. 
 
 ------
 
@@ -17,7 +16,9 @@ This is less of a "just post the solution" and more of me "talking through" solv
 
 | Task Name                      | Start      | ⭐         | ⭐⭐       |
 |--------------------------------|------------|------------|------------|
-| Day 1: Trebuchet?!             | 2023-12-01 |            | 2023-12-01 |
+| [Day 1: Trebuchet?!             | 2023-12-01 |            | 2023-12-01 |
+| Day 2:             | 2023-12-02 |            |  |
+
 
 
 ------
@@ -35,3 +36,13 @@ This is less of a "just post the solution" and more of me "talking through" solv
 |                                |            |            |            |
 
 And then I got sick.... 
+
+----
+
+
+::: {.callout-tip}
+## Acknowledgements  
+
+This website is created from the [EllaKaye/advent-of-code-website-template](https://github.com/EllaKaye/advent-of-code-website-template) repository. There’s documentation on how to use and adapt the template in their repo README.
+
+:::

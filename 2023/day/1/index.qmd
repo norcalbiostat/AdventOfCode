@@ -9,7 +9,7 @@ categories:
 draft: false
 ---
 
-## Setup
+# Setup
 
 [The original challenge](https://adventofcode.com/2023/day/1)
 
@@ -17,23 +17,63 @@ draft: false
 library(aochelpers) # for data loading
 library(stringr); library(stringi)
 input <- aoc_input_vector(1, 2023)
-head(input)
 ```
 
-:::{.callout-tip icon=true}
-### Example Data
+# TLDR; Solutions
+
+## Part 1 ⭐
+
+::: {.callout-danger}
+### ❓  What is my calibration number? 
+
+On each line, the calibration value can be found by combining the first digit and the last digit (in that order) to form a single two-digit number.
+:::
+
+```{r}
+nums <- gsub("[a-z]", "", input)
+first.num <- str_extract(nums, "^.")
+last.num <- str_extract(nums, ".$")
+as.numeric(paste0(first.num, last.num)) |> sum()
+```
+
+## Part 2 ⭐⭐
+
+::: {.callout-danger}
+### ❓ What is my  _actual_ calibration number? 
+
+> Your calculation isn't quite right. It looks like some of the digits are actually spelled out with letters: one, two, three, four, five, six, seven, eight, and nine also count as valid "digits". 
+
+:::
+
+
+```{r}
+valid <- c("one","two","three","four","five","six","seven","eight","nine", as.character(1:9))
+valid.num <- c(1:9,1:9) 
+
+N <- length(input)
+new.cal.vals <- rep(0, N)
+
+for(i in 1:N){
+	x <- stri_locate_all_regex(input[i], valid)
+	x.first <- lapply(x, head, 1) |> unlist() |> matrix(ncol=2, byrow=TRUE)
+	x.last  <- lapply(x, tail, 1) |> unlist() |> matrix(ncol=2, byrow=TRUE)
+	first <- which.min(x.first[,1])
+	last  <- which.max(x.last[,2])
+	new.cal.vals[i] <- as.numeric(paste0(valid.num[first], valid.num[last]))
+}
+sum(new.cal.vals)
+```
+
+# Walkthrough / Explainer
+
+## Part 1
+
+:::{.callout-exa icon=true}
+Example Data
 ```{r}
 exa <- c("1abc2","pqr3stu8vwx","a1b2c3d4e5f","treb7uchet")
 ```
 
-:::
-
-## Part 1
-
-:::{.callout-warning icon=false}
-### ❓ What is my calibration number? 
-
-On each line, the calibration value can be found by combining the first digit and the last digit (in that order) to form a single two-digit number.
 :::
 
 Remove all characters from the string, then grab the first and last number.
@@ -59,13 +99,8 @@ sum(calibration.value)
 
 ## Part 2
 
-:::{.callout-warning icon=false}
-### ❓ What is my  _actual_ calibration number? 
-
-> "Your calculation isn't quite right. It looks like some of the digits are actually spelled out with letters: one, two, three, four, five, six, seven, eight, and nine also count as valid "digits"." 
-
-:::
-
+:::{.callout-exa icon=true}
+Example Data
 ```{r}
 exa2 <- c("two1nine",
   "eightwothree",
@@ -77,6 +112,8 @@ exa2 <- c("two1nine",
   "7eight7",     # 2 new test cases
   "3stuffthree")
 ```
+
+:::
 
 Okay, so let's define a list of valid 'digits', and their corresponding numeric values. 
 ```{r}
@@ -211,22 +248,7 @@ sum(new.cal.vals)
 
 ```{r}
 #| echo: false
-library(sessioninfo)
-# save the session info as an object
-pkg_session <- session_info(pkgs = "attached")
-
-# get the quarto version
-quarto_version <- system("quarto --version", intern = TRUE)
-
-# inject the quarto info
-pkg_session$platform$quarto <- paste(
-  system("quarto --version", intern = TRUE), 
-  "@", 
-  quarto::quarto_path()
-  )
-
-# print it out
-pkg_session
+sessioninfo::session_info(pkgs = "attached")
 ```
 
 </details>

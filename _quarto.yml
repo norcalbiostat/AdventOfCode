@@ -10,7 +10,7 @@ execute:
   
 website:
   title: "Advent of Code"
-  #site-url: https://github.com
+  site-url: https://norcalbiostat.github.io/AdventOfCode/
   description: My solutions to Advent of Code
   repo-url: https://github.com/norcalbiostat/AdventOfCode
   navbar:
