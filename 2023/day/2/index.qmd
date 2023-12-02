@@ -1,0 +1,78 @@
+---
+title: "2023: Day 2 - Cube Conundrum"
+date: 2023-12-2
+categories:
+  - TAG_1
+  - TAG_2
+draft: true
+---
+
+## Setup
+
+[The original challenge](https://adventofcode.com/2023/day/2)
+
+```{r}
+library(aochelpers)
+# other options: aoc_input_data_frame(), aoc_input_matrix()
+input <- aoc_input_vector(2, 2023)
+head(input)
+```
+
+# TLDR; Solutions
+
+## Part 1 ⭐
+
+::: {.callout-danger}
+### ❓  W
+
+:::
+
+
+## Part 2 ⭐⭐
+
+::: {.callout-danger}
+### ❓  
+
+:::
+
+
+# Walkthrough / Explainer
+
+I was launched successfully to Snow Island, which has a noticeable lack of snow.
+
+## Part 1
+
+:::{.callout-exa icon=true}
+Example Data
+```{r}
+exa <- 0
+```
+
+
+## Part 2
+
+:::{.callout-exa icon=true}
+Example Data
+```{r}
+exa <- 0
+```
+
+
+
+##### Session info {.appendix}
+
+<details><summary>Toggle</summary>
+
+
+```{r}
+#| echo: false
+sessioninfo::session_info(pkgs = "attached")
+```
+
+
+</details>
+
+
+
+
+
