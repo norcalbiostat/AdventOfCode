@@ -1,0 +1,106 @@
+---
+title: "2023: Day 3 - Gear Ratios"
+date: 2023-12-3
+categories:
+  - TAG_1
+  - TAG_2
+draft: true
+---
+
+## Setup
+
+[The original challenge](https://adventofcode.com/2023/day/3)
+
+```{r}
+library(aochelpers)
+library(dplyr)
+# other options: aoc_input_data_frame(), aoc_input_matrix()
+input <- aoc_input_matrix(3, 2023)
+head(input)
+```
+
+# TLDR; Solutions
+
+## Part 1 ⭐
+
+::: {.callout-danger}
+### ❓  W
+
+:::
+
+
+## Part 2 ⭐⭐
+
+::: {.callout-danger}
+### ❓  
+
+:::
+
+
+# Walkthrough / Explainer
+
+I get to a gondola that'll take me to the water source. But ofc the gondola is broken. Why would I expect any different. Gotta find the missing part. 
+
+## Part 1
+
+:::{.callout-exa icon=true}
+Example Data
+```{r}
+exa <- c("467..114..",
+				 "...*......",
+				 "..35..633.",
+				 "......#...",
+				 "617*......",
+				 ".....+.58.",
+				 "..592.....",
+				 "......755.",
+				 "...$.*....",
+				 ".664.598..")
+
+# convert to match aoc matrix input
+(exa.in <- matrix(unlist(strsplit(exa, split = "")), 
+							nrow = length(exa), byrow = TRUE))
+```
+
+dot's don't mean anything, so make them missing.
+```{r}
+exa.in[exa.in=="."] <- NA
+exa.in
+```
+
+We only care if the number is neighbors with a symbol, so convert all symbols to something common. 
+```{r}
+(ex3 <- gsub("\\D", "*", exa.in))
+```
+
+
+
+
+
+## Part 2
+
+:::{.callout-exa icon=true}
+Example Data
+```{r}
+exa <- 0
+```
+
+
+
+##### Session info {.appendix}
+
+<details><summary>Toggle</summary>
+
+
+```{r}
+#| echo: false
+sessioninfo::session_info(pkgs = "attached")
+```
+
+
+</details>
+
+
+
+
+
