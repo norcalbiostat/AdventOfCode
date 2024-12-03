@@ -1,7 +1,6 @@
 ---
 title: "Advent of Code"
 subtitle: "My solutions and notes"
-description: "My solutions and notes stuff"
 code-tools: false
 ---
 
