@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2022-12-01">
+<meta name="dcterms.date" content="2024-12-02">
 
-<title>2022: Day 1 – Advent of Code</title>
+<title>2024: Day 01 Historian Hysteria – Advent of Code</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -107,7 +107,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <link rel="stylesheet" href="../../../styles.css">
-<meta property="og:title" content="2022: Day 1 – Advent of Code">
+<meta property="og:title" content="2024: Day 01 Historian Hysteria – Advent of Code">
 <meta property="og:description" content="My solutions to Advent of Code">
 <meta property="og:site_name" content="Advent of Code">
 </head>
@@ -166,7 +166,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
-  <li><a href="#my-solution" id="toc-my-solution" class="nav-link" data-scroll-target="#my-solution">My solution</a></li>
+  <li><a href="#tldr-solutions" id="toc-tldr-solutions" class="nav-link" data-scroll-target="#tldr-solutions">TLDR; Solutions</a>
+  <ul class="collapse">
+  <li><a href="#part-1" id="toc-part-1" class="nav-link" data-scroll-target="#part-1">Part 1 ⭐</a>
+  <ul class="collapse">
+  <li><a href="#what-is-the-total-distance-between-your-lists" id="toc-what-is-the-total-distance-between-your-lists" class="nav-link" data-scroll-target="#what-is-the-total-distance-between-your-lists">❓ What is the total distance between your lists?</a></li>
+  </ul></li>
+  <li><a href="#part-2" id="toc-part-2" class="nav-link" data-scroll-target="#part-2">Part 2 ⭐⭐</a>
+  <ul class="collapse">
+  <li><a href="#calculate-a-total-similarity-score-by-adding-up-each-number-in-the-left-list-after-multiplying-it-by-the-number-of-times-that-number-appears-in-the-right-list." id="toc-calculate-a-total-similarity-score-by-adding-up-each-number-in-the-left-list-after-multiplying-it-by-the-number-of-times-that-number-appears-in-the-right-list." class="nav-link" data-scroll-target="#calculate-a-total-similarity-score-by-adding-up-each-number-in-the-left-list-after-multiplying-it-by-the-number-of-times-that-number-appears-in-the-right-list.">❓ Calculate a total similarity score by adding up each number in the left list after multiplying it by the number of times that number appears in the right list.</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#walkthrough-explainer" id="toc-walkthrough-explainer" class="nav-link" data-scroll-target="#walkthrough-explainer">Walkthrough / Explainer</a>
+  <ul class="collapse">
+  <li><a href="#part-1-1" id="toc-part-1-1" class="nav-link" data-scroll-target="#part-1-1">Part 1</a></li>
+  <li><a href="#part-2-1" id="toc-part-2-1" class="nav-link" data-scroll-target="#part-2-1">Part 2</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -175,10 +190,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">2022: Day 1</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+<div class="quarto-title-block"><div><h1 class="title">2024: Day 01 Historian Hysteria</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
   <div class="quarto-categories">
-    <div class="quarto-category">base R</div>
-    <div class="quarto-category">lists</div>
+    <div class="quarto-category">loop</div>
+    <div class="quarto-category">grepl</div>
+    <div class="quarto-category">vectors</div>
   </div>
   </div>
 
@@ -190,7 +206,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 1, 2022</p>
+      <p class="date">December 2, 2024</p>
     </div>
   </div>
   
@@ -204,113 +220,175 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="setup" class="level2">
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
-<p><a href="https://adventofcode.com/2022/day/1">The original challenge</a></p>
-</section>
-<section id="my-solution" class="level2">
-<h2 class="anchored" data-anchor-id="my-solution">My solution</h2>
+<p><a href="https://adventofcode.com/2024/day/01">The original challenge</a></p>
+<p>Chief historian is lost, gotta try to find him. Searched his office, found several lists of places (ID’s) we should look, but the lists don’t align. Need to find out how close they are.</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Toggle the code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># packages</span></span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(aochelpers)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># import data</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>raw <span class="ot">&lt;-</span> <span class="fu">read.delim</span>(<span class="st">"input.txt"</span>, <span class="at">blank.lines.skip =</span> <span class="cn">FALSE</span>, <span class="at">header =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>raw <span class="ot">&lt;-</span> <span class="fu">rename</span>(raw, <span class="at">calories =</span> V1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<p>Associate each entry with an elf. Each blank line indicates a new elf.</p>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Toggle the code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>next.elf <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">which</span>(<span class="fu">is.na</span>(raw))) <span class="co"># where do the next elfs start?</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>n.elf <span class="ot">&lt;-</span> <span class="fu">length</span>(next.elf)           <span class="co"># how many new elfs?</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>raw<span class="sc">$</span>elfID <span class="ot">&lt;-</span> <span class="dv">0</span>                      <span class="co"># set index</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<p>index elves</p>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Toggle the code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(e <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>(n.elf<span class="dv">-1</span>)){</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  raw<span class="sc">$</span>elfID[next.elf[e]<span class="sc">:</span>(next.elf[e<span class="sc">+</span><span class="dv">1</span>]<span class="sc">-</span><span class="dv">1</span>)] <span class="ot">&lt;-</span> e</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<p>add the last elf</p>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Toggle the code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>raw<span class="sc">$</span>elfID[next.elf[e<span class="sc">+</span><span class="dv">1</span>]<span class="sc">:</span><span class="fu">NROW</span>(raw)] <span class="ot">&lt;-</span> n.elf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<p>now drop empty rows</p>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Toggle the code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>elves <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(raw)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<div class="callout callout-style-default callout-warning no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-❓ Which elf has the most calories?
-</div>
-</div>
-<div class="callout-body-container callout-body">
-
-</div>
-</div>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Toggle the code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>elves <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(elfID) <span class="sc">%&gt;%</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">tot.cals =</span> <span class="fu">sum</span>(calories)) <span class="sc">%&gt;%</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(tot.cals)) <span class="sc">%&gt;%</span> <span class="fu">slice</span>(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># other options: aoc_input_data_frame(), aoc_input_matrix()</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>input <span class="ot">&lt;-</span> <span class="fu">aoc_input_vector</span>(<span class="dv">01</span>, <span class="dv">2024</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(input)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 2
-  elfID tot.cals
-  &lt;dbl&gt;    &lt;int&gt;
-1   189    68775</code></pre>
+<pre><code>[1] "23238   26034" "94370   90190" "15509   72666" "48816   23909"
+[5] "31300   40420" "14729   97519"</code></pre>
 </div>
 </div>
-<div class="callout callout-style-default callout-warning no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-❓ How many calories are carried by the top three elves?
-</div>
-</div>
-<div class="callout-body-container callout-body">
-
-</div>
-</div>
+</section>
+<section id="tldr-solutions" class="level1">
+<h1>TLDR; Solutions</h1>
+<section id="part-1" class="level2">
+<h2 class="anchored" data-anchor-id="part-1">Part 1 ⭐</h2>
+<section id="what-is-the-total-distance-between-your-lists" class="level3 callout-danger">
+<h3 class="anchored" data-anchor-id="what-is-the-total-distance-between-your-lists">❓ What is the total distance between your lists?</h3>
+</section>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Toggle the code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>top3 <span class="ot">&lt;-</span> elves <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(elfID) <span class="sc">%&gt;%</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">tot.cals =</span> <span class="fu">sum</span>(calories)) <span class="sc">%&gt;%</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(tot.cals)) <span class="sc">%&gt;%</span> <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(top3<span class="sc">$</span>tot.cals)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> input <span class="sc">|&gt;</span> <span class="fu">lines_to_matrix</span>(<span class="at">split =</span> <span class="st">"   "</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>c1 <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">as.numeric</span>(p1[,<span class="dv">1</span>]))</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>c2 <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">as.numeric</span>(p1[,<span class="dv">2</span>]))</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">abs</span>(c1<span class="sc">-</span>c2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 202585</code></pre>
+<pre><code>[1] 2769675</code></pre>
 </div>
 </div>
+</section>
+<section id="part-2" class="level2">
+<h2 class="anchored" data-anchor-id="part-2">Part 2 ⭐⭐</h2>
+<section id="calculate-a-total-similarity-score-by-adding-up-each-number-in-the-left-list-after-multiplying-it-by-the-number-of-times-that-number-appears-in-the-right-list." class="level3 callout-danger">
+<h3 class="anchored" data-anchor-id="calculate-a-total-similarity-score-by-adding-up-each-number-in-the-left-list-after-multiplying-it-by-the-number-of-times-that-number-appears-in-the-right-list.">❓ Calculate a total similarity score by adding up each number in the left list after multiplying it by the number of times that number appears in the right list.</h3>
+</section>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Toggle the code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>multiplier <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">NROW</span>(p1))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">NROW</span>(p1)){</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    multiplier[i] <span class="ot">&lt;-</span> <span class="fu">grepl</span>(c1[i], c2) <span class="sc">|&gt;</span> <span class="fu">sum</span>()</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(c1<span class="sc">*</span>multiplier)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 24643097</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="walkthrough-explainer" class="level1">
+<h1>Walkthrough / Explainer</h1>
+<section id="part-1-1" class="level2">
+<h2 class="anchored" data-anchor-id="part-1-1">Part 1</h2>
+<div class="callout-exa" data-icon="true">
+<p><strong>Example Data</strong></p>
+<p>Data comes in as space separated lists, so I used the <code>lines_to_matrix</code> function from <code>aochelpers</code></p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Toggle the code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>(exa <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"3   4"</span>, <span class="st">"4   3"</span>, <span class="st">"2   5"</span>, <span class="st">"1   3"</span>, <span class="st">"3   9"</span>, <span class="st">"3   3"</span>)  <span class="sc">|&gt;</span> <span class="fu">lines_to_matrix</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2] [,3] [,4] [,5]
+[1,] "3"  " "  " "  " "  "4" 
+[2,] "4"  " "  " "  " "  "3" 
+[3,] "2"  " "  " "  " "  "5" 
+[4,] "1"  " "  " "  " "  "3" 
+[5,] "3"  " "  " "  " "  "9" 
+[6,] "3"  " "  " "  " "  "3" </code></pre>
+</div>
+</div>
+</div>
+<p><em>Pair up the smallest number in the left list with the smallest number in the right list, then the second-smallest left number with the second-smallest right number, and so on.</em></p>
+<p>So, take the separation even further and detach the lists into separate vectors, sorted ascendingly.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Toggle the code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>ex1 <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">as.numeric</span>(exa[,<span class="dv">1</span>]))</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>ex2 <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">as.numeric</span>(exa[,<span class="dv">5</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p><em>Within each pair, figure out how far apart the two numbers are; you’ll need to add up all of those distances.</em></p>
+<p>Sum the absolute differences</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Toggle the code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">abs</span>(ex1<span class="sc">-</span>ex2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 11</code></pre>
+</div>
+</div>
+<p>Matches the example solution.</p>
+</section>
+<section id="part-2-1" class="level2">
+<h2 class="anchored" data-anchor-id="part-2-1">Part 2</h2>
+<p>The two lists are pretty different. The Historians can’t agree on where the problem is at, but noticed that some of the ID”s are duplicated. So let’s calculate a similarity score.</p>
+<p>_ Calculate a total similarity score by adding up each number in the left list after multiplying it by the number of times that number appears in the right list._</p>
+<p>So, use <code>grepl</code> to identify the number of times each element in the first vector appears in the second vector. Since it returns a TRUE/FALSE for ever element, add up the trues using <code>sum</code>. Then loop over all rows, add that as a third vector.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Toggle the code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>mult <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">NROW</span>(exa))</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">NROW</span>(exa)){</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    mult[i] <span class="ot">&lt;-</span> <span class="fu">grepl</span>(ex1[i], ex2) <span class="sc">|&gt;</span> <span class="fu">sum</span>()</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Now take the first column, and multiply it by the multiplier, then add the result</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Toggle the code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(ex1<span class="sc">*</span>mult)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 31</code></pre>
+</div>
+</div>
+<p>Matches example.</p>
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section id="session-info" class="level5 appendix"><h2 class="anchored quarto-appendix-heading">Session info</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Toggle
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>─ Session info ───────────────────────────────────────────────────────────────
+ setting  value
+ version  R version 4.4.1 (2024-06-14)
+ os       macOS Sonoma 14.6.1
+ system   aarch64, darwin20
+ ui       X11
+ language (EN)
+ collate  en_US.UTF-8
+ ctype    en_US.UTF-8
+ tz       America/Los_Angeles
+ date     2024-12-02
+ pandoc   3.1.11 @ /Applications/RStudio.app/Contents/Resources/app/quarto/bin/tools/aarch64/ (via rmarkdown)
+
+─ Packages ───────────────────────────────────────────────────────────────────
+ package    * version    date (UTC) lib source
+ aochelpers * 0.1.0.9000 2024-12-02 [1] Github (EllaKaye/aochelpers@d4ccd91)
+ dplyr      * 1.1.4      2023-11-17 [1] CRAN (R 4.4.0)
+
+ [1] /Users/rdonatello/Library/R/arm64/4.4/library
+ [2] /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/library
+
+──────────────────────────────────────────────────────────────────────────────</code></pre>
+</div>
+</div>
+</details>
 
 
 <!-- -->
 
-</section>
-
-</main> <!-- /main -->
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -928,77 +1006,129 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb10" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "2022: Day 1"</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> 2022-12-1</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span><span class="co"> [base R, lists]</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="an">draft:</span><span class="co"> false</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">## Setup</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">The original challenge</span><span class="co">](https://adventofcode.com/2022/day/1)</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="fu">## My solution </span></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co"># packages</span></span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="co"># import data</span></span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>raw <span class="ot">&lt;-</span> <span class="fu">read.delim</span>(<span class="st">"input.txt"</span>, <span class="at">blank.lines.skip =</span> <span class="cn">FALSE</span>, <span class="at">header =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>raw <span class="ot">&lt;-</span> <span class="fu">rename</span>(raw, <span class="at">calories =</span> V1)</span>
-<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>Associate each entry with an elf. Each blank line indicates a new elf.</span>
-<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>next.elf <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">which</span>(<span class="fu">is.na</span>(raw))) <span class="co"># where do the next elfs start?</span></span>
-<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>n.elf <span class="ot">&lt;-</span> <span class="fu">length</span>(next.elf)           <span class="co"># how many new elfs?</span></span>
-<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>raw<span class="sc">$</span>elfID <span class="ot">&lt;-</span> <span class="dv">0</span>                      <span class="co"># set index</span></span>
-<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>index elves</span>
-<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(e <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>(n.elf<span class="dv">-1</span>)){</span>
-<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>  raw<span class="sc">$</span>elfID[next.elf[e]<span class="sc">:</span>(next.elf[e<span class="sc">+</span><span class="dv">1</span>]<span class="sc">-</span><span class="dv">1</span>)] <span class="ot">&lt;-</span> e</span>
-<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>add the last elf</span>
-<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>raw<span class="sc">$</span>elfID[next.elf[e<span class="sc">+</span><span class="dv">1</span>]<span class="sc">:</span><span class="fu">NROW</span>(raw)] <span class="ot">&lt;-</span> n.elf</span>
-<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a>now drop empty rows</span>
-<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a>elves <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(raw)</span>
-<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a>:::{.callout-warning icon=false}</span>
-<span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a><span class="fu">### ❓ Which elf has the most calories? </span></span>
-<span id="cb10-61"><a href="#cb10-61" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb10-62"><a href="#cb10-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-65"><a href="#cb10-65" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a>elves <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(elfID) <span class="sc">%&gt;%</span></span>
-<span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">tot.cals =</span> <span class="fu">sum</span>(calories)) <span class="sc">%&gt;%</span></span>
-<span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(tot.cals)) <span class="sc">%&gt;%</span> <span class="fu">slice</span>(<span class="dv">1</span>)</span>
-<span id="cb10-69"><a href="#cb10-69" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb10-70"><a href="#cb10-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-71"><a href="#cb10-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-72"><a href="#cb10-72" aria-hidden="true" tabindex="-1"></a>:::{.callout-warning icon=false}</span>
-<span id="cb10-73"><a href="#cb10-73" aria-hidden="true" tabindex="-1"></a><span class="fu">### ❓ How many calories are carried by the top three elves?</span></span>
-<span id="cb10-74"><a href="#cb10-74" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb10-75"><a href="#cb10-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-78"><a href="#cb10-78" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb10-79"><a href="#cb10-79" aria-hidden="true" tabindex="-1"></a>top3 <span class="ot">&lt;-</span> elves <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(elfID) <span class="sc">%&gt;%</span></span>
-<span id="cb10-80"><a href="#cb10-80" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">tot.cals =</span> <span class="fu">sum</span>(calories)) <span class="sc">%&gt;%</span></span>
-<span id="cb10-81"><a href="#cb10-81" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(tot.cals)) <span class="sc">%&gt;%</span> <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span>
-<span id="cb10-82"><a href="#cb10-82" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(top3<span class="sc">$</span>tot.cals)</span>
-<span id="cb10-83"><a href="#cb10-83" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb10-84"><a href="#cb10-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-85"><a href="#cb10-85" aria-hidden="true" tabindex="-1"></a></span>
+<div class="sourceCode" id="cb16" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "2024: Day 01 Historian Hysteria"</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> 2024-12-02</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co">  - loop</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co">  - grepl</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co">  - vectors</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="an">draft:</span><span class="co"> false</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="fu">## Setup</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">The original challenge</span><span class="co">](https://adventofcode.com/2024/day/01)</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>Chief historian is lost, gotta try to find him. Searched his office, found several lists of places (ID's) we should look, but the lists don't align. Need to find out how close they are. </span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(aochelpers)</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="co"># other options: aoc_input_data_frame(), aoc_input_matrix()</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>input <span class="ot">&lt;-</span> <span class="fu">aoc_input_vector</span>(<span class="dv">01</span>, <span class="dv">2024</span>)</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(input)</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a><span class="fu"># TLDR; Solutions</span></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a><span class="fu">## Part 1 ⭐</span></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>::: {.callout-danger}</span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a><span class="fu">### ❓  What is the total distance between your lists?</span></span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> input <span class="sc">|&gt;</span> <span class="fu">lines_to_matrix</span>(<span class="at">split =</span> <span class="st">"   "</span>)</span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>c1 <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">as.numeric</span>(p1[,<span class="dv">1</span>]))</span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>c2 <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">as.numeric</span>(p1[,<span class="dv">2</span>]))</span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">abs</span>(c1<span class="sc">-</span>c2))</span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a><span class="fu">## Part 2 ⭐⭐</span></span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a>::: {.callout-danger}</span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a><span class="fu">### ❓  Calculate a total similarity score by adding up each number in the left list after multiplying it by the number of times that number appears in the right list.</span></span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a>multiplier <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">NROW</span>(p1))</span>
+<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">NROW</span>(p1)){</span>
+<span id="cb16-57"><a href="#cb16-57" aria-hidden="true" tabindex="-1"></a>    multiplier[i] <span class="ot">&lt;-</span> <span class="fu">grepl</span>(c1[i], c2) <span class="sc">|&gt;</span> <span class="fu">sum</span>()</span>
+<span id="cb16-58"><a href="#cb16-58" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-59"><a href="#cb16-59" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(c1<span class="sc">*</span>multiplier)</span>
+<span id="cb16-60"><a href="#cb16-60" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-61"><a href="#cb16-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-62"><a href="#cb16-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-63"><a href="#cb16-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-64"><a href="#cb16-64" aria-hidden="true" tabindex="-1"></a><span class="fu"># Walkthrough / Explainer</span></span>
+<span id="cb16-65"><a href="#cb16-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-66"><a href="#cb16-66" aria-hidden="true" tabindex="-1"></a><span class="fu">## Part 1</span></span>
+<span id="cb16-67"><a href="#cb16-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-68"><a href="#cb16-68" aria-hidden="true" tabindex="-1"></a>:::{.callout-exa icon=true}</span>
+<span id="cb16-69"><a href="#cb16-69" aria-hidden="true" tabindex="-1"></a>**Example Data**</span>
+<span id="cb16-70"><a href="#cb16-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-71"><a href="#cb16-71" aria-hidden="true" tabindex="-1"></a>Data comes in as space separated lists, so I used the <span class="in">`lines_to_matrix`</span> function from <span class="in">`aochelpers`</span></span>
+<span id="cb16-74"><a href="#cb16-74" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-75"><a href="#cb16-75" aria-hidden="true" tabindex="-1"></a>(exa <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"3   4"</span>, <span class="st">"4   3"</span>, <span class="st">"2   5"</span>, <span class="st">"1   3"</span>, <span class="st">"3   9"</span>, <span class="st">"3   3"</span>)  <span class="sc">|&gt;</span> <span class="fu">lines_to_matrix</span>())</span>
+<span id="cb16-76"><a href="#cb16-76" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-77"><a href="#cb16-77" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb16-78"><a href="#cb16-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-79"><a href="#cb16-79" aria-hidden="true" tabindex="-1"></a>_Pair up the smallest number in the left list with the smallest number in the right list, then the second-smallest left number with the second-smallest right number, and so on._</span>
+<span id="cb16-80"><a href="#cb16-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-81"><a href="#cb16-81" aria-hidden="true" tabindex="-1"></a>So, take the separation even further and detach the lists into separate vectors, sorted ascendingly. </span>
+<span id="cb16-82"><a href="#cb16-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-85"><a href="#cb16-85" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-86"><a href="#cb16-86" aria-hidden="true" tabindex="-1"></a>ex1 <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">as.numeric</span>(exa[,<span class="dv">1</span>]))</span>
+<span id="cb16-87"><a href="#cb16-87" aria-hidden="true" tabindex="-1"></a>ex2 <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">as.numeric</span>(exa[,<span class="dv">5</span>]))</span>
+<span id="cb16-88"><a href="#cb16-88" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-89"><a href="#cb16-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-90"><a href="#cb16-90" aria-hidden="true" tabindex="-1"></a>_Within each pair, figure out how far apart the two numbers are; you'll need to add up all of those distances._</span>
+<span id="cb16-91"><a href="#cb16-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-92"><a href="#cb16-92" aria-hidden="true" tabindex="-1"></a>Sum the absolute differences</span>
+<span id="cb16-95"><a href="#cb16-95" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-96"><a href="#cb16-96" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">abs</span>(ex1<span class="sc">-</span>ex2))</span>
+<span id="cb16-97"><a href="#cb16-97" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-98"><a href="#cb16-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-99"><a href="#cb16-99" aria-hidden="true" tabindex="-1"></a>Matches the example solution. </span>
+<span id="cb16-100"><a href="#cb16-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-101"><a href="#cb16-101" aria-hidden="true" tabindex="-1"></a><span class="fu">## Part 2</span></span>
+<span id="cb16-102"><a href="#cb16-102" aria-hidden="true" tabindex="-1"></a>The two lists are pretty different. The Historians can't agree on where the problem is at, but noticed that some of the ID"s are duplicated. So let's calculate a similarity score. </span>
+<span id="cb16-103"><a href="#cb16-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-104"><a href="#cb16-104" aria-hidden="true" tabindex="-1"></a>_ Calculate a total similarity score by adding up each number in the left list after multiplying it by the number of times that number appears in the right list._</span>
+<span id="cb16-105"><a href="#cb16-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-106"><a href="#cb16-106" aria-hidden="true" tabindex="-1"></a>So, use <span class="in">`grepl`</span> to identify the number of times each element in the first vector appears in the second vector. Since it returns a TRUE/FALSE for ever element, add up the trues using <span class="in">`sum`</span>. Then loop over all rows, add that as a third vector. </span>
+<span id="cb16-109"><a href="#cb16-109" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-110"><a href="#cb16-110" aria-hidden="true" tabindex="-1"></a>mult <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">NROW</span>(exa))</span>
+<span id="cb16-111"><a href="#cb16-111" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">NROW</span>(exa)){</span>
+<span id="cb16-112"><a href="#cb16-112" aria-hidden="true" tabindex="-1"></a>    mult[i] <span class="ot">&lt;-</span> <span class="fu">grepl</span>(ex1[i], ex2) <span class="sc">|&gt;</span> <span class="fu">sum</span>()</span>
+<span id="cb16-113"><a href="#cb16-113" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-114"><a href="#cb16-114" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-115"><a href="#cb16-115" aria-hidden="true" tabindex="-1"></a>Now take the first column, and multiply it by the multiplier, then add the result</span>
+<span id="cb16-118"><a href="#cb16-118" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-119"><a href="#cb16-119" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(ex1<span class="sc">*</span>mult)</span>
+<span id="cb16-120"><a href="#cb16-120" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-121"><a href="#cb16-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-122"><a href="#cb16-122" aria-hidden="true" tabindex="-1"></a>Matches example. </span>
+<span id="cb16-123"><a href="#cb16-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-124"><a href="#cb16-124" aria-hidden="true" tabindex="-1"></a><span class="fu">##### Session info {.appendix}</span></span>
+<span id="cb16-125"><a href="#cb16-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-126"><a href="#cb16-126" aria-hidden="true" tabindex="-1"></a>&lt;details&gt;&lt;summary&gt;Toggle&lt;/summary&gt;</span>
+<span id="cb16-127"><a href="#cb16-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-128"><a href="#cb16-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-131"><a href="#cb16-131" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-132"><a href="#cb16-132" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb16-133"><a href="#cb16-133" aria-hidden="true" tabindex="-1"></a>sessioninfo<span class="sc">::</span><span class="fu">session_info</span>(<span class="at">pkgs =</span> <span class="st">"attached"</span>)</span>
+<span id="cb16-134"><a href="#cb16-134" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-135"><a href="#cb16-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-136"><a href="#cb16-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-137"><a href="#cb16-137" aria-hidden="true" tabindex="-1"></a>&lt;/details&gt;</span>
+<span id="cb16-138"><a href="#cb16-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-139"><a href="#cb16-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-140"><a href="#cb16-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-141"><a href="#cb16-141" aria-hidden="true" tabindex="-1"></a></span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
