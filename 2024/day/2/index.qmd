@@ -1,0 +1,158 @@
+---
+title: "2024: Day 02 Red-Nosed Reports"
+date: 2024-12-02
+categories:
+  - loops
+  - tidyr
+  - NAs
+draft: false
+---
+
+## Setup
+
+[The original challenge](https://adventofcode.com/2024/day/02)
+
+# Input data
+Each report has varying number of levels, so I used readLines to import the whole thing in as a data frame, and then used `separate_wider_delim` to split the character vector out into columns. I don't know the full length of rows, so i chose a large value and then dropped columns containing no data. Then convert to a numeric matrix. 
+
+```{r}
+library(aochelpers)
+input <- readLines("~/GitHub/AdventOfCode/2024/day/2/input") |> data.frame()
+head(input)
+input2 <- tidyr::separate_wider_delim(input, 
+														cols = everything(), 
+														delim = " ",
+														names = paste0("rpt", 1:8), 
+														too_few = "align_start")
+
+input.num <- apply(input2, 2, as.numeric)
+			
+# apply(input2, 2, function(x)mean(is.na(x))) # identify blank columns
+```
+
+# TLDR; Solutions
+
+## Part 1 ⭐
+
+::: {.callout-danger}
+### ❓  How many reports are safe?
+:::
+
+```{r}
+input.diffmat <- matrix(NA, nrow = NROW(input.num), ncol = NCOL(input.num)-1)
+
+for(i in 1:NROW(input.num)){
+	for(j in 2:NCOL(input.num)){
+		input.diffmat[i, j-1] <- input.num[i, j]-input.num[i, j-1]
+	}
+}
+
+flag.size <- input.diffmat ==0 | abs(input.diffmat) > 3
+# adjusted here for missing values
+unsafe <- rowSums(flag.size, na.rm = TRUE) >0
+
+for(i in 1:NROW(input.diffmat)){
+	if(unsafe[i] == FALSE){
+		# adjusted for missing values
+		unsafe[i] <- length(rle(input.diffmat[i,which(!is.na(input.diffmat[i,]))]> 0)$lengths)>1
+	}
+}
+sum(!unsafe)
+```
+
+
+
+## Part 2 ⭐⭐
+
+::: {.callout-danger}
+### ❓  
+:::
+
+
+
+
+# Walkthrough / Explainer
+
+## Part 1
+First place to look for the chief is the Red-Nosed Reindeer nuclear fusion/fission plant. But they need help with some data crunching. 
+
+:::{.callout-exa icon=true}
+**Example Data**
+
+One line per report, one column per level. Example data has 6 reports with 5 levels each. 
+```{r}
+exa <- c("7 6 4 2 1", "1 2 7 8 9", "9 7 6 2 1", "1 3 2 4 5", "8 6 4 4 1", "1 3 6 7 9") |>
+	lines_to_matrix(split = ' ')
+class(exa) <- "numeric"
+exa
+```
+:::
+
+_The Red-Nosed reactor safety systems can only tolerate levels that are A) either all increasing or all decreasing, or B) Any two adjacent levels differ by at least one and at most three._
+
+okay, so we need a difference between column j+1 and j. Easiest way would probably be to do a loop. 
+
+```{r}
+exa.diffmat <- matrix(NA, nrow = NROW(exa), ncol = NCOL(exa)-1)
+for(i in 1:NROW(exa)){
+	for(j in 2:NCOL(exa)){
+		exa.diffmat[i, j-1] <- exa[i, j]-exa[i, j-1]
+	}
+}
+exa.diffmat
+```
+
+Now to flag the unsafe rows based on size of difference. I want the result to be TRUE/FALSE for later indexing. 
+
+```{r}
+flag.size <- exa.diffmat ==0 | abs(exa.diffmat) > 3
+unsafe <- apply(flag.size, 1, sum)|> as.logical()
+```
+
+To flag the sign changes, use `rle()` Run Length Encoding. If the length of the `lengths` output is greater than 1, then there was a sign change. 
+
+```{r}
+rle(exa.diffmat[6,]>0)
+rle(exa.diffmat[6,]>0)$lengths
+length(rle(exa.diffmat[6,]>0)$lengths)>1
+```
+
+Only run this on the rows that haven't already been flagged as unsafe
+```{r}
+for(i in 1:NROW(exa.diffmat)){
+	if(unsafe[i] == FALSE){
+		unsafe[i] <- length(rle(exa.diffmat[i,]>0)$lengths)>1
+	}
+}
+
+unsafe
+!unsafe
+```
+
+number of safe reports
+```{r}
+sum(!unsafe)
+```
+
+Matches. 
+
+
+## Part 2
+
+##### Session info {.appendix}
+
+<details><summary>Toggle</summary>
+
+
+```{r}
+#| echo: false
+sessioninfo::session_info(pkgs = "attached")
+```
+
+
+</details>
+
+
+
+
+

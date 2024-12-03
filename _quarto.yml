@@ -6,7 +6,7 @@ project:
     port: 4321
 
 execute:
-  freeze: auto
+  freeze: true
   
 website:
   title: "Advent of Code"
@@ -17,6 +17,7 @@ website:
     left:
      - 2022.qmd
      - 2023.qmd
+     - 2024.qmd
     right:
       - icon: github
         href: https://github.com/norcalbiostat/AdventOfCode

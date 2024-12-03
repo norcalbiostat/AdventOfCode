@@ -12,6 +12,17 @@ Each daily post contains my solution, along with the process.
 
 ------
 
+# Advent of Code 2024
+
+| Task Name                      | Start      | ⭐         | ⭐⭐       |
+|--------------------------------|------------|------------|------------|
+| Day 1: Historian Hysteria      | 2024-12-02 |    | 2023-12-02 |
+| Day 2: Red-Nosed Reports       | 2024-12-02 | 2023-12-02 |  |
+
+
+
+------
+
 # Advent of Code 2023
 
 | Task Name                      | Start      | ⭐         | ⭐⭐       |
