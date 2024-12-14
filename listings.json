@@ -1,8 +1,10 @@
 [
   {
-    "listing": "/2023.html",
+    "listing": "/2024.html",
     "items": [
-      "/2023/day/1/index.html"
+      "/2024/day/1/index.html",
+      "/2024/day/2/index.html",
+      "/2024/day/3/index.html"
     ]
   },
   {
@@ -12,10 +14,9 @@
     ]
   },
   {
-    "listing": "/2024.html",
+    "listing": "/2023.html",
     "items": [
-      "/2024/day/2/index.html",
-      "/2024/day/1/index.html"
+      "/2023/day/1/index.html"
     ]
   }
 ]
