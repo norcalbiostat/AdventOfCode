@@ -1,0 +1,135 @@
+---
+title: "2024: Day 03 Mull it over"
+date: 2024-12-13
+categories:
+draft: false
+---
+
+## Setup
+
+[The original challenge](https://adventofcode.com/2024/day/03)
+
+Goal: Multiply numbers using `mul(X,Y)` function. 
+Except instructions got corrupt and so there are incorrect symbols. 
+
+x`mul(2,4)`%&mul[3,7]!@^do_not_`mul(5,5)`+mul(32,64]then(`mul(11,8)``mul(8,5)`)
+Only the four highlighted sections are real `mul` instructions. Adding up the result of each instruction produces 161 (2*4 + 5*5 + 11*8 + 8*5).
+
+# Input data
+
+```{r}
+library(aochelpers)
+indata <- readLines("~/GitHub/AdventOfCode/2024/day/3/input") 
+```
+
+# TLDR; Solutions
+
+## Part 1 ⭐
+
+```{r}
+a <- stringr::str_extract_all(indata, "\\mul\\(\\d+,\\d+\\)")  |> unlist()
+df <- data.frame(a = a)
+df$a1 <- gsub("mul", "", df$a)
+
+df2 <- stringr::str_extract_all(df$a, "\\d+", simplify = TRUE) 
+df2 <- apply(df2, 2, as.numeric)
+df2[,1]%*%df2[,2]
+```
+
+
+## Part 2 ⭐⭐
+
+::: {.callout-danger}
+### ❓  
+:::
+
+
+
+
+# Walkthrough / Explainer
+
+## Part 1
+Clearly a regex problem.
+
+:::{.callout-exa icon=true}
+**Example Data**
+
+```{r}
+exa <- "xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))"
+```
+
+:::
+
+```{r}
+a <- stringr::str_extract_all(exa, "\\mul\\(\\d+,\\d+\\)") |> unlist() 
+```
+
+Throw it into a data frame, will automatically separate into rows. Now I can get out the #'s and multiply.  
+```{r}
+df <- data.frame(a = a)
+df$a1 <- gsub("mul", "", df$a)
+
+df2 <- stringr::str_extract_all(df$a, "\\d+", simplify = TRUE) 
+df2 <- apply(df2, 2, as.numeric)
+```
+
+Now to do rowwise multiplication and sum it up
+```{r}
+df2[,1]%*%df2[,2]
+```
+
+Well.. the example matches. Time to see how jacked up the actual data is. 
+
+```{r}
+indata <- readLines("~/GitHub/AdventOfCode/2024/day/3/input") 
+```
+
+It's reading it in as multiple lines... when I don't think that was the intention. I think that's okay, when I `unlist` it combined it into one vector. 
+
+```{r}
+a <- stringr::str_extract_all(indata, "\\mul\\(\\d+,\\d+\\)")  |> unlist()
+df <- data.frame(a = a)
+df$a1 <- gsub("mul", "", df$a)
+
+df2 <- stringr::str_extract_all(df$a, "\\d+", simplify = TRUE) 
+df2 <- apply(df2, 2, as.numeric)
+df2[,1]%*%df2[,2]
+```
+
+Yep. that worked. Coolio
+
+
+## Part 2
+
+There are two new instructions 
+
+* The do() instruction enables future mul instructions.
+		- The other mul instructions function normally, including the one at the end that gets re-enabled by a do() instruction.
+* The don't() instruction disables future mul instructions.
+		- mul(5,5) and mul(11,8) instructions are disabled
+		
+```{r}
+exa2 <- "xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))"
+```
+
+
+
+
+
+##### Session info {.appendix}
+
+<details><summary>Toggle</summary>
+
+
+```{r}
+#| echo: false
+sessioninfo::session_info(pkgs = "attached")
+```
+
+
+</details>
+
+
+
+
+

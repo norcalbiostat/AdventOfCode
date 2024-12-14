@@ -15,9 +15,9 @@ Each daily post contains my solution, along with the process.
 
 | Task Name                      | Start      | ⭐         | ⭐⭐       |
 |--------------------------------|------------|------------|------------|
-| Day 1: Historian Hysteria      | 2024-12-02 |    | 2023-12-02 |
+| Day 1: Historian Hysteria      | 2024-12-02 |            | 2023-12-02 |
 | Day 2: Red-Nosed Reports       | 2024-12-02 | 2023-12-02 |  |
-
+| Day 3: Mull it over            | 2024-12-13 | 2023-12-13 |  |
 
 
 ------

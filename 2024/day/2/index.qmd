@@ -5,6 +5,7 @@ categories:
   - loops
   - tidyr
   - NAs
+  - one_star
 draft: false
 ---
 
@@ -88,7 +89,7 @@ exa
 ```
 :::
 
-_The Red-Nosed reactor safety systems can only tolerate levels that are A) either all increasing or all decreasing, or B) Any two adjacent levels differ by at least one and at most three._
+> The Red-Nosed reactor safety systems can only tolerate levels that are A) either all increasing or all decreasing, or B) Any two adjacent levels differ by at least one and at most three.
 
 okay, so we need a difference between column j+1 and j. Easiest way would probably be to do a loop. 
 
@@ -138,6 +139,53 @@ Matches.
 
 
 ## Part 2
+
+> The same rules apply as before, except if removing a single level from an unsafe report would make it safe, the report instead counts as safe.
+
+I was stumped, so I'm trying a tactic idea from [Angel Martinez](https://github.com/Angelmartinez-20/Advent_of_Code/tree/main). 
+
+Check between each level for whether or not it was a safe transition. 
+Then count the number of unsafe levels per row. 
+
+```{r, eval=FALSE}
+angels.if_safe.fun <- function(i, j){    
+	diff <- abs(exa[i,j] - exa[i,j-1])
+	flip <- (sign(exa[i,j]) != sign(exa[i,j-1]))
+		
+	status <- dplyr::case_when(diff == 0 ~ "unsafe", 
+														 diff > 3 ~ "unsafe", 
+														 flip == TRUE ~ "unsafe",
+														 .default = "safe")
+	return(status)
+}
+	
+angels.if_safe.fun(3, 5)
+	
+# set an indicator of the number of unsafe levels
+is.safe <- rep("safe", NROW(exa))
+	
+for(i in 1:NROW(exa)){
+	J <- length(na.omit(exa[i,])) # number of non-NA entries
+	err <- 0
+	for(j in 2:J){
+		# run the function to check for an unsafe level.
+		if(angels.if_safe.fun(i, j) == "unsafe"){
+			# if j is unsafe, and not at J, delete it and put j+1 where j is at
+			exa[i, j:J-1] <- exa[i, j+1:J]
+			exa[i, J] <- NA
+			err <- 1
+		}
+		# re-run safe check function on the same j. If another error then flag as unsafe
+		if(angels.if_safe.fun(i, j) == "unsafe" & err==1){
+			is.safe[i] <- "unsafe"
+		}
+	}
+}
+
+(safe.if.remove.1 <- n.unsafe<2)
+```
+
+Yea.. this isn't working b/c when j=J, there is no j+1. 
 
 ##### Session info {.appendix}
 

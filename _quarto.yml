@@ -7,6 +7,7 @@ project:
 
 execute:
   freeze: true
+  echo: true
   
 website:
   title: "Advent of Code"
